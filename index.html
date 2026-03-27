@@ -5,30 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MKPC Library</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
     --cream: #FAF7F2; --warm-white: #FFFDF9; --gold: #C9A84C;
     --gold-light: #E8D5A3; --gold-dark: #8B6914; --deep: #1A1209;
-    --brown: #4A3728; --brown-light: #7A6355; --sage: #5C6B5A;
+    --brown: #4A3728; --brown-light: #7A6355;
     --border: rgba(74,55,40,0.15); --border-strong: rgba(74,55,40,0.3);
-    --shadow: 0 4px 24px rgba(26,18,9,0.1); --shadow-hover: 0 8px 40px rgba(26,18,9,0.18);
+    --shadow-hover: 0 8px 40px rgba(26,18,9,0.18);
     --red: #C0392B; --green: #1E7E34;
   }
   body { font-family: 'Noto Sans KR', sans-serif; background: var(--cream); color: var(--deep); min-height: 100vh; }
 
-  /* ── SETUP BANNER ── */
-  #setup-banner {
-    background: #fff3cd; border-bottom: 2px solid #f0a500;
-    padding: 12px 2rem; font-size: 13.5px; color: #7a5200;
-    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-  }
+  #setup-banner { background: #fff3cd; border-bottom: 2px solid #f0a500; padding: 12px 2rem; font-size: 13.5px; color: #7a5200; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
   #setup-banner strong { font-weight: 700; }
-  #setup-banner a { color: #7a5200; font-weight: 600; }
+  #setup-banner a { color: #7a5200; font-weight: 600; cursor: pointer; }
   #setup-banner.hidden { display: none; }
 
-  /* ── HEADER ── */
   header { background: var(--deep); color: var(--cream); position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--gold); }
   .header-inner { max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 70px; }
   .logo-area { display: flex; align-items: center; gap: 14px; }
@@ -41,17 +34,12 @@
   .stat-pill { text-align: center; }
   .stat-pill .num { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--gold-light); display: block; line-height: 1; }
   .stat-pill .label { font-size: 10px; color: rgba(250,247,242,0.45); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; display: block; }
-
-  /* Librarian login area in header */
   .lib-area { display: flex; align-items: center; gap: 10px; }
   .lib-status { font-size: 12px; color: var(--gold-light); opacity: 0.7; }
   .lib-status.active { color: #7dffb3; opacity: 1; font-weight: 500; }
   .btn-sm { padding: 5px 14px; border-radius: 6px; font-size: 12px; font-family: 'Noto Sans KR', sans-serif; cursor: pointer; border: 1px solid rgba(201,168,76,0.4); background: transparent; color: var(--gold-light); transition: all 0.15s; white-space: nowrap; }
   .btn-sm:hover { background: rgba(201,168,76,0.15); }
-  .btn-sm.danger { border-color: rgba(220,80,80,0.5); color: #ffaaaa; }
-  .btn-sm.danger:hover { background: rgba(220,80,80,0.15); }
 
-  /* ── HERO ── */
   .hero { background: linear-gradient(160deg, #2C1F14 0%, #1A1209 60%, #0D0A05 100%); padding: 4rem 2rem 3rem; text-align: center; position: relative; overflow: hidden; }
   .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.12) 0%, transparent 70%); pointer-events: none; }
   .hero-ornament { font-size: 13px; letter-spacing: 4px; color: var(--gold); text-transform: uppercase; margin-bottom: 1rem; opacity: 0.8; }
@@ -63,7 +51,6 @@
   .search-wrap input:focus { border-color: var(--gold); background: rgba(250,247,242,0.12); }
   .search-icon { position: absolute; right: 1.2rem; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 1.1rem; pointer-events: none; }
 
-  /* ── FILTER BAR ── */
   .filter-bar { background: var(--warm-white); border-bottom: 1px solid var(--border); padding: 1rem 2rem; position: sticky; top: 70px; z-index: 90; }
   .filter-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
   .filter-label { font-size: 12px; color: var(--brown-light); letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; }
@@ -73,7 +60,6 @@
   .chip.active { background: var(--deep); border-color: var(--deep); color: var(--cream); }
   .result-count { font-size: 13px; color: var(--brown-light); margin-left: auto; white-space: nowrap; }
 
-  /* ── MAIN ── */
   .main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
   .view-toggle { display: flex; justify-content: flex-end; margin-bottom: 1.5rem; gap: 8px; align-items: center; }
   .view-toggle span { font-size: 12px; color: var(--brown-light); margin-right: 4px; }
@@ -81,13 +67,12 @@
   .view-btn.active { background: var(--deep); color: var(--cream); border-color: var(--deep); }
   .view-btn:hover:not(.active) { background: var(--gold-light); }
 
-  /* ── GRID ── */
   .books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 1.5rem; }
   .books-grid.hidden { display: none; }
   .book-card { background: var(--warm-white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; cursor: pointer; transition: all 0.2s; position: relative; }
   .book-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: var(--gold); }
   .book-spine { height: 140px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-  .book-number { position: absolute; top: 10px; left: 12px; font-size: 11px; font-weight: 500; padding: 3px 8px; background: rgba(26,18,9,0.35); color: var(--cream); border-radius: 100px; letter-spacing: 0.5px; }
+  .book-number { position: absolute; top: 10px; left: 12px; font-size: 11px; font-weight: 500; padding: 3px 8px; background: rgba(26,18,9,0.35); color: var(--cream); border-radius: 100px; }
   .book-icon { font-size: 3rem; opacity: 0.9; }
   .book-info { padding: 1rem; border-top: 1px solid var(--border); }
   .book-title { font-family: 'Noto Serif KR', serif; font-size: 14.5px; font-weight: 600; line-height: 1.4; margin-bottom: 6px; color: var(--deep); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -96,7 +81,6 @@
   .book-call { position: absolute; bottom: 0; right: 0; font-size: 10px; background: var(--cream); border-top: 1px solid var(--border); border-left: 1px solid var(--border); padding: 3px 7px; border-radius: 12px 0 0 0; color: var(--brown-light); font-family: monospace; }
   .out-badge { position: absolute; bottom: 8px; right: 8px; font-size: 10px; background: rgba(192,57,43,0.85); color: #fff; padding: 2px 7px; border-radius: 100px; }
 
-  /* ── LIST ── */
   .books-list { display: none; }
   .books-list.active { display: block; }
   .list-table { width: 100%; border-collapse: collapse; background: var(--warm-white); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); font-size: 14px; }
@@ -113,7 +97,6 @@
   .td-pub { color: var(--brown-light); font-size: 13px; }
   .td-call { font-family: monospace; font-size: 12px; color: var(--brown-light); }
 
-  /* ── SPINE COLORS ── */
   .spine-0 { background: linear-gradient(135deg,#2C4A3E,#1A3028); }
   .spine-1 { background: linear-gradient(135deg,#3D2A1E,#261510); }
   .spine-2 { background: linear-gradient(135deg,#1E2E4A,#0F1C30); }
@@ -123,7 +106,6 @@
   .spine-6 { background: linear-gradient(135deg,#3A1E1E,#250F0F); }
   .spine-7 { background: linear-gradient(135deg,#1E2A3A,#0F1825); }
 
-  /* ── MODAL ── */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(26,18,9,0.75); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
   .modal-overlay.open { display: flex; }
   .modal { background: var(--warm-white); border-radius: 16px; width: 100%; max-width: 540px; overflow: hidden; box-shadow: 0 20px 60px rgba(26,18,9,0.4); max-height: 90vh; overflow-y: auto; }
@@ -139,71 +121,57 @@
   .modal-val { font-size: 14.5px; color: var(--deep); flex: 1; line-height: 1.5; }
   .modal-isbn { font-family: monospace; font-size: 13px; color: var(--brown); }
 
-  /* Checkout section inside modal */
   .checkout-section { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px solid var(--border); }
   .checkout-section h3 { font-size: 14px; color: var(--brown); margin-bottom: 1rem; letter-spacing: 0.5px; text-transform: uppercase; }
   .checkout-locked { text-align: center; padding: 1.5rem; color: var(--brown-light); font-size: 14px; }
   .checkout-locked a { color: var(--gold-dark); cursor: pointer; font-weight: 600; text-decoration: underline; }
   .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
   .form-group { display: flex; flex-direction: column; gap: 5px; }
-  .form-group.full { grid-column: 1 / -1; }
   .form-group label { font-size: 12px; color: var(--brown-light); }
-  .form-group input, .form-group textarea {
-    padding: 8px 10px; border: 1px solid var(--border-strong); border-radius: 8px;
-    font-family: 'Noto Sans KR', sans-serif; font-size: 14px; color: var(--deep);
-    background: var(--cream); outline: none; transition: border 0.15s;
-  }
+  .form-group input, .form-group textarea { padding: 8px 10px; border: 1px solid var(--border-strong); border-radius: 8px; font-family: 'Noto Sans KR', sans-serif; font-size: 14px; color: var(--deep); background: var(--cream); outline: none; transition: border 0.15s; }
   .form-group input:focus, .form-group textarea:focus { border-color: var(--gold); }
   .form-group textarea { resize: vertical; min-height: 60px; }
 
-  /* Checkout record display */
   .checkout-record { background: #fff8e8; border: 1px solid #e8c96a; border-radius: 10px; padding: 1rem; margin-bottom: 1rem; }
   .checkout-record .cr-row { display: flex; gap: 8px; font-size: 13px; margin-bottom: 5px; }
   .checkout-record .cr-key { color: var(--brown-light); width: 70px; flex-shrink: 0; }
   .checkout-record .cr-val { color: var(--deep); font-weight: 500; }
   .overdue-tag { display: inline-block; background: #fde8e8; color: #a32020; font-size: 11px; padding: 2px 8px; border-radius: 100px; margin-left: 6px; }
 
-  .modal-footer { padding: 1rem 1.5rem; background: var(--cream); border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
+  .avail-badge { display: inline-block; padding: 2px 8px; border-radius: 100px; font-size: 11px; font-weight: 500; }
+  .avail-in { background: #D4EDDA; color: #155724; }
+  .avail-out { background: #F8D7DA; color: #721C24; }
+
   .btn { padding: 8px 20px; border-radius: 8px; font-size: 13.5px; font-family: 'Noto Sans KR', sans-serif; cursor: pointer; border: none; transition: all 0.15s; }
   .btn-ghost { background: transparent; border: 1px solid var(--border-strong); color: var(--brown); }
   .btn-ghost:hover { background: var(--cream); }
   .btn-primary { background: var(--deep); color: var(--gold-light); }
   .btn-primary:hover { background: var(--brown); }
-  .btn-danger { background: var(--red); color: #fff; }
-  .btn-danger:hover { background: #a93226; }
   .btn-success { background: var(--green); color: #fff; }
   .btn-success:hover { background: #155724; }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  /* Login modal */
   .login-modal { background: var(--warm-white); border-radius: 16px; width: 100%; max-width: 360px; overflow: hidden; box-shadow: 0 20px 60px rgba(26,18,9,0.4); }
   .login-header { background: var(--deep); padding: 1.5rem; text-align: center; }
   .login-header h2 { font-family: 'Playfair Display', serif; color: var(--gold-light); font-size: 1.3rem; }
   .login-header p { font-size: 12px; color: rgba(250,247,242,0.5); margin-top: 4px; }
   .login-body { padding: 1.5rem; }
-  .login-body .form-group { margin-bottom: 12px; }
   .login-error { color: #c0392b; font-size: 13px; margin-top: 8px; display: none; }
 
-  /* Avail badge */
-  .avail-badge { display: inline-block; padding: 2px 8px; border-radius: 100px; font-size: 11px; font-weight: 500; }
-  .avail-in { background: #D4EDDA; color: #155724; }
-  .avail-out { background: #F8D7DA; color: #721C24; }
-
-  /* No results */
   .no-results { text-align: center; padding: 4rem 2rem; color: var(--brown-light); }
   .no-results-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
   .no-results h3 { font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--brown); }
 
-  /* Toast */
+  .panel { margin-top: 2rem; padding: 2rem; background: var(--warm-white); border-radius: 16px; border: 1px solid var(--border); }
+  .panel h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 0.4rem; }
+  .panel p.sub { font-size: 13.5px; color: var(--brown-light); margin-bottom: 1.5rem; line-height: 1.7; }
+
   .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: var(--deep); color: var(--gold-light); padding: 10px 24px; border-radius: 100px; font-size: 14px; z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; border: 1px solid rgba(201,168,76,0.3); }
   .toast.show { opacity: 1; }
-
-  /* Loading spinner */
-  .spinner { width: 20px; height: 20px; border: 2px solid rgba(201,168,76,0.3); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; vertical-align: middle; margin-right: 6px; }
+  .spinner { width: 16px; height: 16px; border: 2px solid rgba(201,168,76,0.3); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; vertical-align: middle; margin-right: 6px; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* Scripture */
-  .scripture { background: var(--deep); color: var(--gold-light); text-align: center; padding: 1.2rem 2rem; font-family: 'Noto Serif KR', serif; font-size: 14px; opacity: 0.8; letter-spacing: 0.3px; line-height: 1.7; border-top: 1px solid rgba(201,168,76,0.2); }
+  .scripture { background: var(--deep); color: var(--gold-light); text-align: center; padding: 1.2rem 2rem; font-family: 'Noto Serif KR', serif; font-size: 14px; opacity: 0.8; line-height: 1.7; border-top: 1px solid rgba(201,168,76,0.2); }
   .scripture cite { display: block; font-size: 12px; color: var(--gold); margin-top: 4px; font-style: normal; letter-spacing: 1px; }
 
   @media (max-width: 768px) {
@@ -211,7 +179,6 @@
     .books-grid { grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); }
     .hero { padding: 2.5rem 1rem 2rem; }
     .main { padding: 1.5rem 1rem; }
-    .list-table { font-size: 13px; }
     .list-table .hide-mobile { display: none; }
     .form-grid { grid-template-columns: 1fr; }
   }
@@ -219,10 +186,9 @@
 </head>
 <body>
 
-<!-- Setup banner -->
 <div id="setup-banner">
-  ⚠️ <strong>Setup required:</strong> Add your Supabase credentials below to enable checkout tracking.
-  <a href="#" onclick="document.getElementById('config-section').scrollIntoView({behavior:'smooth'});return false;">Jump to setup ↓</a>
+  ⚠️ <strong>Setup required:</strong> Add your Supabase credentials to enable checkout tracking.
+  <a onclick="document.getElementById('config-section').scrollIntoView({behavior:'smooth'})">Jump to setup ↓</a>
   &nbsp;|&nbsp; Until configured, the site works in read-only mode.
 </div>
 
@@ -237,7 +203,7 @@
     </div>
     <div class="header-right">
       <div class="header-stats">
-        <div class="stat-pill"><span class="num" id="total-count">1004</span><span class="label">총 도서</span></div>
+        <div class="stat-pill"><span class="num" id="total-count">1280</span><span class="label">총 도서</span></div>
         <div class="stat-pill"><span class="num" id="checked-out-count">—</span><span class="label">대출중</span></div>
         <div class="stat-pill"><span class="num" id="publisher-count">—</span><span class="label">출판사</span></div>
       </div>
@@ -288,14 +254,56 @@
     <p>다른 검색어를 시도해보세요.</p>
   </div>
 
-  <!-- Config section -->
-  <div id="config-section" style="margin-top:4rem; padding:2rem; background:var(--warm-white); border-radius:16px; border:1px solid var(--border);">
-    <h2 style="font-family:'Playfair Display',serif; font-size:1.4rem; margin-bottom:0.5rem;">⚙️ Supabase Setup</h2>
-    <p style="font-size:13.5px; color:var(--brown-light); margin-bottom:1.5rem; line-height:1.7;">
-      To enable shared checkout tracking, you need a free <a href="https://supabase.com" target="_blank" style="color:var(--gold-dark);font-weight:600;">Supabase</a> account.
-      Follow the steps below, then paste your credentials here.
-    </p>
+  <!-- Add Book Panel -->
+  <div class="panel" id="add-book-section">
+    <h2>📚 도서 추가 / Add a Book</h2>
+    <p class="sub">사서만 새 도서를 추가할 수 있습니다. Librarian login required.</p>
+    <div id="add-book-locked" style="text-align:center; padding:1rem; color:var(--brown-light); font-size:14px;">
+      <a style="color:var(--gold-dark);cursor:pointer;font-weight:600;" onclick="handleLibBtn()">사서 로그인 후 이용 가능합니다 →</a>
+    </div>
+    <div id="add-book-form" style="display:none;">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>등록번호 (ID) *</label>
+          <input type="number" id="ab-id" placeholder="1281">
+        </div>
+        <div class="form-group">
+          <label>청구기호 (Call Number)</label>
+          <input type="text" id="ab-call" placeholder="234.8-1-1">
+        </div>
+        <div class="form-group" style="grid-column:1/-1;">
+          <label>제목 (Title) *</label>
+          <input type="text" id="ab-title" placeholder="책 제목">
+        </div>
+        <div class="form-group">
+          <label>저자 (Author)</label>
+          <input type="text" id="ab-author" placeholder="저자 이름">
+        </div>
+        <div class="form-group">
+          <label>출판사 (Publisher)</label>
+          <input type="text" id="ab-publisher" placeholder="출판사">
+        </div>
+        <div class="form-group">
+          <label>ISBN</label>
+          <input type="text" id="ab-isbn" placeholder="978-89-000-0000-0">
+        </div>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center; margin-top:0.5rem;">
+        <button class="btn btn-primary" id="add-book-btn" onclick="handleAddBook()">+ 도서 추가</button>
+        <button class="btn btn-ghost" onclick="clearAddBookForm()">초기화</button>
+        <span id="add-book-status" style="font-size:13px; margin-left:4px;"></span>
+      </div>
+      <div id="recently-added" style="display:none; margin-top:2rem;">
+        <p style="font-size:12px; color:var(--brown-light); letter-spacing:1px; text-transform:uppercase; margin-bottom:10px;">최근 추가된 도서</p>
+        <div id="recently-added-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+    </div>
+  </div>
 
+  <!-- Supabase Setup Panel -->
+  <div class="panel" id="config-section">
+    <h2>⚙️ Supabase Setup</h2>
+    <p class="sub">To enable shared checkout tracking, you need a free <a href="https://supabase.com" target="_blank" style="color:var(--gold-dark);font-weight:600;">Supabase</a> account. Follow the steps below.</p>
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem;">
       <div style="background:var(--cream); border-radius:10px; padding:1.2rem; border:1px solid var(--border);">
         <p style="font-weight:700; font-size:13px; margin-bottom:0.8rem; color:var(--brown);">Step 1 — Create a Supabase project</p>
@@ -328,12 +336,10 @@ ALTER TABLE checkouts ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Allow all" ON checkouts FOR ALL USING (true) WITH CHECK (true);</pre>
       </div>
     </div>
-
     <div style="background:var(--cream); border-radius:10px; padding:1.2rem; border:1px solid var(--border); margin-bottom:1.5rem;">
       <p style="font-weight:700; font-size:13px; margin-bottom:0.8rem; color:var(--brown);">Step 3 — Get your API credentials</p>
       <p style="font-size:12.5px; color:var(--brown-light); line-height:1.8;">Go to <strong>Project Settings → API</strong>. Copy your <strong>Project URL</strong> and <strong>anon/public key</strong> and paste them below.</p>
     </div>
-
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
       <div class="form-group">
         <label>Supabase Project URL</label>
@@ -347,56 +353,11 @@ CREATE POLICY "Allow all" ON checkouts FOR ALL USING (true) WITH CHECK (true);</
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:1.5rem;">
       <div class="form-group">
         <label>Librarian Password (you choose)</label>
-        <input type="password" id="cfg-pass" placeholder="Choose a password for the librarian">
+        <input type="password" id="cfg-pass" placeholder="Choose a password">
       </div>
     </div>
-    <button class="btn btn-primary" onclick="saveConfig()">Save & Connect</button>
+    <button class="btn btn-primary" onclick="saveConfig()">Save &amp; Connect</button>
     <span id="cfg-status" style="font-size:13px; color:var(--brown-light); margin-left:12px;"></span>
-
-  <!-- Add Book Section -->
-  <div id="add-book-section" style="margin-top:2rem; padding:2rem; background:var(--warm-white); border-radius:16px; border:1px solid var(--border);">
-    <h2 style="font-family:'Playfair Display',serif; font-size:1.4rem; margin-bottom:0.4rem;">📚 도서 추가 / Add a Book</h2>
-    <p style="font-size:13.5px; color:var(--brown-light); margin-bottom:1.5rem; line-height:1.7;">사서만 새 도서를 추가할 수 있습니다. Librarian login required to add books.</p>
-    <div id="add-book-locked" style="text-align:center; padding:1.5rem; color:var(--brown-light); font-size:14px;">
-      사서만 도서를 추가할 수 있습니다. <a style="color:var(--gold-dark);cursor:pointer;font-weight:600;" onclick="handleLibBtn()">사서 로그인 →</a>
-    </div>
-    <div id="add-book-form" style="display:none;">
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
-        <div class="form-group">
-          <label>등록번호 (ID) *</label>
-          <input type="number" id="ab-id" placeholder="1005">
-        </div>
-        <div class="form-group">
-          <label>청구기호 (Call Number)</label>
-          <input type="text" id="ab-call" placeholder="234.8-1-1">
-        </div>
-        <div class="form-group" style="grid-column:1/-1;">
-          <label>제목 (Title) *</label>
-          <input type="text" id="ab-title" placeholder="책 제목">
-        </div>
-        <div class="form-group">
-          <label>저자 (Author)</label>
-          <input type="text" id="ab-author" placeholder="저자 이름">
-        </div>
-        <div class="form-group">
-          <label>출판사 (Publisher)</label>
-          <input type="text" id="ab-publisher" placeholder="출판사">
-        </div>
-        <div class="form-group">
-          <label>ISBN</label>
-          <input type="text" id="ab-isbn" placeholder="978-89-000-0000-0">
-        </div>
-      </div>
-      <div style="display:flex; gap:10px; align-items:center; margin-top:0.5rem;">
-        <button class="btn btn-primary" id="add-book-btn" onclick="handleAddBook()">+ 도서 추가</button>
-        <button class="btn btn-ghost" onclick="clearAddBookForm()">초기화</button>
-        <span id="add-book-status" style="font-size:13px; color:var(--brown-light); margin-left:4px;"></span>
-      </div>
-      <div id="recently-added" style="display:none; margin-top:2rem;">
-        <p style="font-size:12px; color:var(--brown-light); letter-spacing:1px; text-transform:uppercase; margin-bottom:10px;">최근 추가된 도서</p>
-        <div id="recently-added-list" style="display:flex; flex-direction:column; gap:8px;"></div>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -419,8 +380,6 @@ CREATE POLICY "Allow all" ON checkouts FOR ALL USING (true) WITH CHECK (true);</
       <div class="modal-row"><span class="modal-key">ISBN</span><span class="modal-val modal-isbn" id="m-isbn"></span></div>
       <div class="modal-row"><span class="modal-key">청구기호</span><span class="modal-val modal-isbn" id="m-call"></span></div>
       <div class="modal-row"><span class="modal-key">대출상태</span><span class="modal-val" id="m-avail"></span></div>
-
-      <!-- Checkout section -->
       <div class="checkout-section" id="checkout-section">
         <h3 id="checkout-section-title">대출 관리</h3>
         <div id="checkout-content"></div>
@@ -452,6 +411,7 @@ CREATE POLICY "Allow all" ON checkouts FOR ALL USING (true) WITH CHECK (true);</
 
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const BOOKS = [
   {id:1,call:'234.-12-42',title:'끈질김',author:'죤 비비어',publisher:'두란노',isbn:'978-89-531-1685-6'},
@@ -560,7 +520,6 @@ const BOOKS = [
   {id:104,call:'234.9',title:'행복한부부로살아가는사랑방정식',author:'데이비드',publisher:'한국장로교출판사',isbn:'89-398-0369-8'},
   {id:105,call:'234.8',title:'새벽길',author:'황나자',publisher:'쿰란출판사',isbn:'978-89-5922-335-0'},
   {id:106,call:'231.5',title:'신앙과 삶속에서',author:'이문균',publisher:'한국장로교 출판사',isbn:'89-398-0145-8'},
-  {id:0,call:'',title:'삼위일체 하나님 알아보기',author:'',publisher:'',isbn:''},
   {id:107,call:'230',title:'생명을 보듬으며',author:'신현순 교수',publisher:'글마루',isbn:''},
   {id:108,call:'230',title:'예수마을 이야기',author:'장학일',publisher:'쿰란출판사',isbn:'978-89-6562-069-3'},
   {id:109,call:'230',title:'다니엘 학습법',author:'김동환',publisher:'규장',isbn:'89-7046-860-9'},
@@ -587,7 +546,6 @@ const BOOKS = [
   {id:130,call:'230',title:'홀리 스피치',author:'신은경',publisher:'물맷돌',isbn:'979-11-86126-12-7'},
   {id:131,call:'235.3',title:'좋은 사역자',author:'빌 하이벨스',publisher:'두란노',isbn:'978-89-531-1181-3'},
   {id:132,call:'230.4',title:'사랑이 없으면 우린',author:'유해욱',publisher:'바오로딸',isbn:'89-331-0765-7'},
-  {id:0,call:'',title:'아무것도 아니라네',author:'',publisher:'',isbn:''},
   {id:133,call:'230.4',title:'인간의 좌표',author:'김재성',publisher:'하나',isbn:'89-8283-069-3'},
   {id:134,call:'234.8',title:'돈과 영적 성숙',author:'손경구',publisher:'두란노',isbn:'89-531-0200-6'},
   {id:135,call:'234.8',title:'성화와 기도',author:'김남준',publisher:'생명의 말씀사',isbn:'89-04-1555-9-2'},
@@ -596,17 +554,14 @@ const BOOKS = [
   {id:138,call:'234',title:'존비비어의 구원',author:'존비비어',publisher:'두란노',isbn:'978-89-531-0890-5'},
   {id:139,call:'230',title:'노아홍수 콘서트',author:'이재만',publisher:'두란노',isbn:'978-89-531-1156-1'},
   {id:140,call:'235.8',title:'이사람아!',author:'하세가와 다모쓰',publisher:'한국장로교출판사',isbn:'89-398-3712-6'},
-  {id:0,call:'',title:'노년의 무슨 재미로 사나',author:'',publisher:'',isbn:''},
   {id:141,call:'235.2',title:'불꽃목양에 빠져라',author:'김남준',publisher:'규장',isbn:'89-7046-129-9'},
   {id:142,call:'235.2',title:'동양인 예수',author:'홍길복',publisher:'쪽지',isbn:'978-89-8336-025-0'},
   {id:143,call:'234.82',title:'복음에 빚진사람',author:'이민교',publisher:'규장',isbn:'978-89-6097-185-1'},
   {id:144,call:'235.2',title:'예수님을 생각나게 하는 사람',author:'헨리 나우웬',publisher:'두란노',isbn:'89-7008'},
   {id:145,call:'234.8',title:'제자는 행동한다',author:'카일 아이들먼',publisher:'규장',isbn:'978-89-6097-357-2'},
   {id:146,call:'230',title:'성막과 절기를 알면',author:'한의택',publisher:'예수살렘',isbn:'978-89-7210-457-5'},
-  {id:0,call:'',title:'예수가 보인다',author:'',publisher:'',isbn:''},
   {id:147,call:'235.6',title:'내래 죽어도 가겠습네다',author:'최광',publisher:'생명의 말씀사',isbn:'978-89-04-16477-6'},
   {id:148,call:'238',title:'뒷담화만 하지 않아도',author:'프란치스코',publisher:'카톨릭 출판사',isbn:'978-89-321-1366-1'},
-  {id:0,call:'',title:'성인이 됩니다',author:'',publisher:'',isbn:''},
   {id:149,call:'230.4',title:'김네몽의 신앙일기 2',author:'김네몽',publisher:'대산아트컴',isbn:'979-11-85098-11-1'},
   {id:150,call:'230',title:'하나님의 구원 역사',author:'김서택',publisher:'성서유니온',isbn:'89-325-3502-7'},
   {id:151,call:'230',title:'출생처럼 죽음도 은총이다',author:'유경재',publisher:'목회교육 연구원',isbn:'89-954521-1-0'},
@@ -619,7 +574,6 @@ const BOOKS = [
   {id:158,call:'234.8',title:'나는 죽고 예수로 사는 사람',author:'유기성',publisher:'규장',isbn:'978-89-6097-064-9'},
   {id:159,call:'234.82',title:'찬송생활의 권능',author:'멀린 R',publisher:'보이스사',isbn:'89-504-0167-3'},
   {id:160,call:'236.3',title:'예수는 생명의 떡이요',author:'김동선',publisher:'한국장로교출판사',isbn:'89-398-061'},
-  {id:0,call:'',title:'밥은 하늘입니다',author:'',publisher:'',isbn:''},
   {id:161,call:'230',title:'성서란 무엇인가',author:'호남신학 대학교',publisher:'한국장로교출판사',isbn:'89-398-0033-8'},
   {id:162,call:'230.4',title:'사랑의 왕진가방',author:'박세록',publisher:'두란노',isbn:'89-531-0574-9'},
   {id:163,call:'233.63',title:'팀켈러의 왕의 십자가',author:'팀켈러',publisher:'두란노',isbn:'978-89-531-1893-5'},
@@ -647,7 +601,6 @@ const BOOKS = [
   {id:185,call:'235.4',title:'부흥, 성령의 축제',author:'라인하르트 본케',publisher:'두란노',isbn:'89-531-0681-8'},
   {id:186,call:'233.01',title:'성경에서 본 인간의 수명',author:'최지웅',publisher:'노문사',isbn:'978-89-86785-99-9'},
   {id:187,call:'235.7',title:'해석학적 상상력과',author:'이원일',publisher:'한국장로교출판사',isbn:'89-398-0675-1'},
-  {id:0,call:'',title:'기독교 교육과정',author:'',publisher:'',isbn:''},
   {id:188,call:'1805',title:'그 나라와 한국농촌',author:'배민수',publisher:'한국장로교출판사',isbn:'89-398-3436-4'},
   {id:189,call:'235.3',title:'소그룹 사역을 망치는 7가지 실수',author:'빌 도나휴.러스로빈슨',publisher:'국제제자 훈련원',isbn:'89-88850-97-1'},
   {id:190,call:'235.4',title:'사랑,그 놀라운 생명',author:'이용주',publisher:'예수 전도단',isbn:'89-85289-85-3'},
@@ -660,7 +613,6 @@ const BOOKS = [
   {id:197,call:'235',title:'이것이 목회의 본질이다',author:'옥한흠',publisher:'국제제자훈련원',isbn:'89-5731-030-4'},
   {id:198,call:'230.4',title:'한민족의 에소더스',author:'정석기',publisher:'쿰란출판사',isbn:'978-89-5922-547-7'},
   {id:199,call:'235.2',title:'우리는 성령을 장식용이나',author:'',publisher:'',isbn:''},
-  {id:0,call:'',title:'선전용으로 받은것이 아닙니다',author:'후안까를로스오르띠즈',publisher:'만나',isbn:'89-7596-007-2'},
   {id:200,call:'234.3',title:'말씀 앞에 머무는 삶',author:'론 스미스',publisher:'예수전도단',isbn:'89-85289-43-8'},
   {id:201,call:'231.42',title:'믿음의 본질',author:'박영선',publisher:'낮은울타리',isbn:'89-5511-0030-0'},
   {id:202,call:'237.2',title:'기도는 전투다',author:'C. 피터왜그너',publisher:'서로사랑',isbn:'89-86876-30-2'},
@@ -698,7 +650,6 @@ const BOOKS = [
   {id:234,call:'230.99',title:'섬기며 사는 기쁨',author:'김장환',publisher:'생각의 나무',isbn:'89-8498-190-7'},
   {id:235,call:'199.7',title:'나는 죽을때까지 재미있게 살고싶다',author:'이근후',publisher:'갤리온',isbn:'978-89-01-15409-1'},
   {id:236,call:'234.8',title:'잡초같은 인생에 베푸시는',author:'강준민',publisher:'두란노',isbn:'89-531-0030-5'},
-  {id:0,call:'',title:'하나님의 은혜',author:'',publisher:'',isbn:''},
   {id:237,call:'230.4',title:'예수안믿으면 손해보는 77가지이유',author:'이만재',publisher:'규장',isbn:'89-7046-541-3'},
   {id:238,call:'234.8',title:'묵상 시작',author:'서승동',publisher:'예수전도단',isbn:'89-85289-76-4'},
   {id:239,call:'235.3',title:'상한 감정의 치유',author:'데이빗 A',publisher:'두란노',isbn:'89-7008-853-9'},
@@ -750,12 +701,10 @@ const BOOKS = [
   {id:285,call:'232.84',title:'오! 그리스도',author:'E. GOULD',publisher:'SOSTV',isbn:'978-89-95994-09-2'},
   {id:286,call:'234.8',title:'모로나 일상속 신앙,교회,삶',author:'박동식',publisher:'CLC',isbn:'978-89-341-2246-3'},
   {id:287,call:'230.4',title:'행복한 가정에는 아버지의',author:'송길원',publisher:'요단',isbn:'89-350-0420-0'},
-  {id:0,call:'',title:'향기가 있다',author:'',publisher:'',isbn:''},
   {id:288,call:'234.8',title:'예수 예수 믿는 것은',author:'도원욱',publisher:'두란노',isbn:'978-89-531-2799-9'},
   {id:289,call:'230.4',title:'예수는 평신도였다',author:'정진호',publisher:'홍성사',isbn:'89-365-0648'},
   {id:290,call:'235.3',title:'교정교육론',author:'최지준',publisher:'한국장로교출판사',isbn:'89-398-3676-6'},
   {id:291,call:'234.15',title:'십계명을 쉽게 이해하기 위한',author:'이수영',publisher:'한장사',isbn:'89-398-0637-9'},
-  {id:0,call:'',title:'서른가지단상',author:'',publisher:'',isbn:''},
   {id:292,call:'234.3',title:'하나님사람의 선명한 기준',author:'전병욱',publisher:'규장',isbn:'89-7046-838-2'},
   {id:293,call:'230',title:'나는 하나님나라의 교사입니다',author:'강준민',publisher:'넥서스',isbn:'979-11-6165-338-9'},
   {id:294,call:'',title:'안아주심',author:'옥한흠',publisher:'국제제훈련원',isbn:'978-89-5731-199-8'},
@@ -772,7 +721,6 @@ const BOOKS = [
   {id:305,call:'233.211',title:'다시는 야곱이라 부르지말라',author:'허용조',publisher:'두란노',isbn:'89-7008-989-6'},
   {id:306,call:'236.911',title:'이단논쟁',author:'정행업',publisher:'한국장로교출판사',isbn:'89-398-0127'},
   {id:307,call:'235.8',title:'기독교 사회운동',author:'정종훈',publisher:'한국장로교출판사',isbn:'89-398-3746-0'},
-  {id:0,call:'',title:'어떻게 할것인가?',author:'',publisher:'',isbn:''},
   {id:308,call:'235.7',title:'교육인가 신앙공동체인가?',author:'김도일',publisher:'한국장로교출판사',isbn:'89-398-0419-8'},
   {id:309,call:'234.8',title:'지성에서 영성으로',author:'이어령',publisher:'열림원',isbn:'978-89-7063'},
   {id:310,call:'231.6',title:'기다림의 신학',author:'배경식',publisher:'한국장로교출판사',isbn:'89-398-0032-X'},
@@ -815,7 +763,6 @@ const BOOKS = [
   {id:348,call:'235.35',title:'청소년 상담 핸드북 (하)',author:'조시 맥도웰',publisher:'한국장로교출판사',isbn:'89-398-0372-8'},
   {id:349,call:'235.34',title:'부부상담',author:'E.L. 워싱톤',publisher:'한국장로교출판사',isbn:'89-398-0376-0'},
   {id:350,call:'236.9',title:'16세기 종교개혁과',author:'총회교육부',publisher:'한국장로교출판사',isbn:'89-398-3726-6'},
-  {id:0,call:'',title:'개혁교회의 유산',author:'',publisher:'',isbn:''},
   {id:351,call:'235',title:'이민목회 프로그램',author:'김선배',publisher:'한국장로교출판사',isbn:'89-398-057-2'},
   {id:352,call:'235.3',title:'목회상담학',author:'오성춘',publisher:'한국장로교출판사',isbn:'89-398-0012-5'},
   {id:353,call:'230',title:'1004 아이들 666사춘기',author:'김기웅',publisher:'그린 라인',isbn:'89-88132-01-7'},
@@ -847,7 +794,6 @@ const BOOKS = [
   {id:379,call:'233.1',title:'엑소더스를 향하여',author:'이종록',publisher:'한국장로교출판사',isbn:'89-398-0162-8'},
   {id:380,call:'231',title:'리츨 신학의 개요',author:'이신형',publisher:'한국장로교출판사',isbn:'89-398-0084-2'},
   {id:381,call:'231',title:'복음주의와 에큐메니칼운동의',author:'이형기',publisher:'한국장로교출판사',isbn:'89-398-0321-3'},
-  {id:0,call:'',title:'세 흐름에 나타난 신학',author:'',publisher:'',isbn:''},
   {id:382,call:'236.9',title:'한국교회 어디로가고있나',author:'이원규',publisher:'대한기독교서회',isbn:'89-511-0375-7'},
   {id:383,call:'235.7',title:'영적 성장을 위한 교육',author:'아이리스 V. 컬리',publisher:'한국장로교출판사',isbn:'89-398-0410-4'},
   {id:384,call:'238.5',title:'종교개혁의 영성',author:'한스 울리히 예거',publisher:'한국장로교출판사',isbn:'89-398-0081-8'},
@@ -915,7 +861,6 @@ const BOOKS = [
   {id:446,call:'230',title:'새벽길',author:'황나자',publisher:'쿰란',isbn:'978-89-5922-335-0'},
   {id:447,call:'230',title:'영적리더쉽',author:'헨리 블랙커비',publisher:'두란노',isbn:'89-531-0187-5'},
   {id:448,call:'230',title:'새장에 갇힌 새가 왜 노래하는지',author:'마여 앤젤루',publisher:'문예출판사',isbn:'89-310-0541-5'},
-  {id:0,call:'',title:'나는 아네',author:'',publisher:'',isbn:''},
   {id:449,call:'230',title:'사랑하면 전도합니다',author:'빌 하이벨스',publisher:'두란노',isbn:'89-531-0691-5'},
   {id:450,call:'230',title:'언약궤 기도',author:'이다윗',publisher:'예찬사',isbn:'978-89-7439-371-7'},
   {id:451,call:'240',title:'내 영혼은 이런대화를 원한다',author:'래리크랩',publisher:'사랑플러스',isbn:'89-90285-11-9'},
@@ -965,7 +910,6 @@ const BOOKS = [
   {id:495,call:'230',title:'당신은 죽어요,그런데 안 죽어요',author:'안이숙',publisher:'요단',isbn:''},
   {id:496,call:'818',title:'애덤킹!희망을 던져라',author:'김홍덕',publisher:'북하우스',isbn:'89-87871-92-4'},
   {id:497,call:'235.4',title:'주님,정말 한 영혼이',author:'',publisher:'',isbn:''},
-  {id:0,call:'',title:'천하보다 귀한가요?',author:'한선희',publisher:'두란노',isbn:'89-7008-942-X'},
   {id:498,call:'234',title:'나는 무당이 아니다',author:'이미자',publisher:'세줄',isbn:'978-89-92211-70-3'},
   {id:499,call:'230',title:'부흥의 현장을 가다',author:'박용규',publisher:'생명의말씀사',isbn:'978-89-04-15764-8'},
   {id:500,call:'234.8',title:'한번사는 인생 어떻게 살것인가',author:'김춘근',publisher:'베드로서원',isbn:'89-7419-149-0'},
@@ -1047,7 +991,6 @@ const BOOKS = [
   {id:576,call:'140 ㅅ',title:'스베덴보리의 위대한 선물',author:'스베덴보리',publisher:'다산호당',isbn:'978-89-932-85-82-6'},
   {id:577,call:'140 ㄱ',title:'김예진 스의 생애와 사상',author:'이민성',publisher:'쿰란출판사',isbn:'978-89-6562-009-9'},
   {id:578,call:'895',title:'내가 이렇게 아픈데, 홰',author:'김준',publisher:'글길나무',isbn:'979-11-955112-1-1'},
-  {id:0,call:'',title:'그대는 그렇게 아픈가요',author:'',publisher:'',isbn:''},
   {id:579,call:'189.2',title:'미움받을 용기 2',author:'기시미 이치로',publisher:'인플루엔설',isbn:'979-11-86560-12-9'},
   {id:580,call:'189',title:'설득의 심리학',author:'로버트 치알디니',publisher:'21세기북스',isbn:'89-509-0522-1'},
   {id:581,call:'813.6',title:'약방집 예배당',author:'박경숙',publisher:'홍성사',isbn:'978-89-365-0242-3'},
@@ -1080,11 +1023,8 @@ const BOOKS = [
   {id:608,call:'500 ㄷ',title:'딸 그리고 함쎄 오르는 산',author:'제프리 노먼',publisher:'청미래',isbn:'89-86836-06-8'},
   {id:609,call:'120 ㅅ',title:'새신자반',author:'이재철',publisher:'홍성사',isbn:'89-356-0129-1'},
   {id:610,call:'140 ㅇ',title:'하늘을 감동시킨',author:'전병욱',publisher:'규장',isbn:'897046997-4'},
-  {id:0,call:'',title:'일천번제 예배자',author:'',publisher:'',isbn:''},
   {id:611,call:'140 ㄴ',title:'나는 하나님의 영광을',author:'지인환',publisher:'규장',isbn:'89-7046-962-1'},
-  {id:0,call:'',title:'위해 공부한다',author:'',publisher:'',isbn:''},
   {id:612,call:'199.1',title:'인생의 절반쯤 왔을때',author:'리처드 J',publisher:'위즈덤 하우스',isbn:'978-89-6086-447-4'},
-  {id:0,call:'',title:'깨닫게 되는 것들',author:'',publisher:'',isbn:''},
   {id:613,call:'140 ㅇ',title:'앞서가는 교회',author:'',publisher:'쿰란출판사',isbn:'89-7434-581-1'},
   {id:614,call:'140 ㅅ',title:'신념이 아닌 믿음을 가져라',author:'김기원',publisher:'엘맨',isbn:'89-85454-38-2'},
   {id:615,call:'100 ㅇ',title:'에베소서 . 빌립보서',author:'이종곤',publisher:'말씀과 만남',isbn:'89-7508-172-9'},
@@ -1176,7 +1116,6 @@ const BOOKS = [
   {id:701,call:'199.1',title:'배짱으로 삽시다',author:'이시형',publisher:'풀잎',isbn:''},
   {id:702,call:'331',title:'명견만리',author:'KBS 제작팀',publisher:'인플루엔설',isbn:'979-11-86560-43-3'},
   {id:703,call:'370.18',title:'아이안에 숨어있는',author:'일지 이승헌',publisher:'한문화',isbn:'89-5699-028-X'},
-  {id:0,call:'',title:'두뇌의 힘을 키워라',author:'',publisher:'',isbn:''},
   {id:704,call:'325.211',title:'드림온',author:'김미경',publisher:'쌤앤 파커스',isbn:'978-89-6570-120-0'},
   {id:705,call:'811.6',title:'별이 되고 말까보다',author:'이경자',publisher:'문예운동',isbn:'89-88511-40-9'},
   {id:706,call:'843.5',title:'템테이션',author:'더글라스 케네디',publisher:'밝은 세상',isbn:'978-89-8437-117-0'},
@@ -1201,7 +1140,6 @@ const BOOKS = [
   {id:725,call:'813.7',title:'엄마의 집',author:'전경린',publisher:'옐림원',isbn:'978-89-7063-578-1'},
   {id:726,call:'833.6',title:'나미야 잡화점의 기적',author:'히가시노 게이고',publisher:'현대문학',isbn:'978-89-7275-619-4'},
   {id:727,call:'340.99',title:'미셸처럼 공부하고',author:'김태광',publisher:'흐름출판',isbn:'978-89-90872-56-2'},
-  {id:0,call:'',title:'오바마처럼 도전하라',author:'',publisher:'',isbn:''},
   {id:728,call:'325.04',title:'남자나이마흔에는결심을 해야한다',author:'김종헌',publisher:'정신세계원',isbn:'89-955803-9-9'},
   {id:729,call:'331.541',title:'세계는 평평하다',author:'토머스 L. 프리드먼',publisher:'창해',isbn:'89-7919-707-1'},
   {id:730,call:'859.7',title:'오베라는 남자',author:'프레드린 배크만',publisher:'다산책방',isbn:'979-11-306-0521-0'},
@@ -1255,7 +1193,6 @@ const BOOKS = [
   {id:778,call:'470.4',title:'열대예찬',author:'최재천',publisher:'현대문학',isbn:'89-7275-259-2'},
   {id:779,call:'863',title:'7년후',author:'기욤뮈소',publisher:'밝은세상',isbn:'978-89-8437-120-0'},
   {id:780,call:'811.6',title:'지금알고 있는걸',author:'류시화',publisher:'열림원',isbn:'978-89-7063-157-8'},
-  {id:0,call:'',title:'그때도 알았더라면',author:'',publisher:'',isbn:''},
   {id:781,call:'810.81',title:'정지용전집',author:'정지용',publisher:'민음사',isbn:'89-374-0506-7'},
   {id:782,call:'199.7',title:'나는죽을때까지 재미있게살고싶다',author:'이근후',publisher:'갤리온',isbn:'978-89-01-27036-4'},
   {id:783,call:'813.6',title:'상록수',author:'심훈',publisher:'일신서적공사',isbn:''},
@@ -1272,7 +1209,6 @@ const BOOKS = [
   {id:794,call:'340.4',title:'주야 청청 뚜벅뚜벅',author:'유인학',publisher:'홍진',isbn:'978-89-88358-19-1'},
   {id:795,call:'322.9542011',title:'하룻밤에 읽는 미국 첫이민이야기',author:'김영란',publisher:'북산책',isbn:'978-89-960356-2-6'},
   {id:796,call:'370.4',title:'나는 겸손하게 공부하고',author:'오진우',publisher:'몽당연필',isbn:'89-951678-1-5'},
-  {id:0,call:'',title:'당당하게 승부한다',author:'',publisher:'',isbn:''},
   {id:797,call:'334.3',title:'사랑의 등대',author:'양희철',publisher:'쿰란출판사',isbn:'89-7434-626-5'},
   {id:798,call:'322.23',title:'남편성격만 알아도 행복해진다',author:'이백용',publisher:'비전과리더십',isbn:'89-90984-04-1'},
   {id:799,call:'199.8',title:'성공을 위해 밑줄 긋고 싶은말들',author:'발타자르 그라시안',publisher:'예가',isbn:'89-7587-444-4'},
@@ -1283,7 +1219,6 @@ const BOOKS = [
   {id:804,call:'841',title:'셰익스피어의 사랑노래',author:'문강희',publisher:'두남',isbn:'978-89-6414-100-7'},
   {id:805,call:'864',title:'느리게 산다는 것의 의미 2',author:'피에르 쌍소',publisher:'현대신서',isbn:'89-8038-209-x'},
   {id:806,call:'833.6',title:'색채가 없는 다자키 쓰쿠루와',author:'무라카미 하루키',publisher:'민음사',isbn:'978-89-374-8792-7'},
-  {id:0,call:'',title:'그가 순례를 떠난 해',author:'',publisher:'',isbn:''},
   {id:807,call:'814.6',title:'노란집',author:'박완서',publisher:'열림원',isbn:'978-89-7063-777-8'},
   {id:808,call:'892.1',title:'일리아스',author:'호메로스',publisher:'범우사',isbn:'89-08-07061-3'},
   {id:809,call:'818',title:'희망은 또다른 희망을 낳는다',author:'서진규',publisher:'푸른숲',isbn:'89-7184-289-x'},
@@ -1331,7 +1266,6 @@ const BOOKS = [
   {id:850,call:'818',title:'그건, 사랑이었네',author:'한비야',publisher:'푸른숲',isbn:'978-89-71840817-3'},
   {id:851,call:'864',title:'느리게 산다는 것의 의미',author:'피에르 쌍소',publisher:'동문선',isbn:'89-8038-131-X'},
   {id:852,call:'810.81',title:'거짓말처럼 영원히 변하지 않을',author:'김유미',publisher:'장락',isbn:'89-85262-81-5'},
-  {id:0,call:'',title:'이런 사람을 갖고 싶다',author:'',publisher:'',isbn:''},
   {id:853,call:'811.6',title:'호흡하는 것들은 모두 빛이다',author:'오연희',publisher:'창조문학사',isbn:'978-89-7784-236-1'},
   {id:854,call:'600 ㅈ',title:'장보는 남자',author:'이윤홍',publisher:'산세상',isbn:''},
   {id:855,call:'843.6',title:'미 비포 유',author:'조조 모예스',publisher:'살림',isbn:'978-89-522-2782-9'},
@@ -1469,7 +1403,6 @@ const BOOKS = [
   {id:988,call:'818',title:'그래도, 사랑',author:'정현주',publisher:'중앙북스',isbn:'978-89-278-0478-9'},
   {id:989,call:'818',title:'바람이 분다 당신이 좋다',author:'이병률',publisher:'청영',isbn:''},
   {id:990,call:'813',title:'김일성의 꿈은 김대중을 남조선',author:'손춤무',publisher:'이포',isbn:'978-89-92908-13-9'},
-  {id:0,call:'',title:'대통령으로 만드는 것이었다',author:'',publisher:'',isbn:''},
   {id:991,call:'811',title:'아청빛 길의 시학',author:'김현자',publisher:'소명출판',isbn:'89-5626-187-3'},
   {id:992,call:'811.7',title:'내 인생아, 고마워!',author:'이영',publisher:'세계밀알',isbn:'979-11-966393-3'},
   {id:993,call:'811.609',title:'시인을 찾아서',author:'신경림',publisher:'우리교육',isbn:'89-8040-903-6'},
@@ -1510,14 +1443,264 @@ const BOOKS = [
   {id:1001,call:'840',title:'핑거스미스',author:'세라워터스',publisher:'열린책들',isbn:'978-89-329-1754-2'},
   {id:1002,call:'813.6',title:'나의 사랑 클레멘타인',author:'최인호',publisher:'샘터',isbn:'89-464-0570-8'},
   {id:1003,call:'594.5',title:'자연을 담은 소박한 밥상',author:'녹색연합',publisher:'북센스',isbn:'978-89-956772-0-9'},
-  {id:1004,call:'510',title:'건강한 생활',author:'데이비드 워너',publisher:'한국장로교출판사',isbn:'89-398-0642-5'}
+  {id:1004,call:'510',title:'건강한 생활',author:'데이비드 워너',publisher:'한국장로교출판사',isbn:'89-398-0642-5'},
+  {id:1005,call:'810.82',title:'하오의사중주',author:'김영교',publisher:'동화서적',isbn:'89-85582-10-0'},
+  {id:1006,call:'843-1',title:'아인슈타인의 꿈',author:'앨렌아이트맨',publisher:'예하',isbn:'89-7385-259-0'},
+  {id:1007,call:'813.6',title:'명왕비열전(1)',author:'김영주',publisher:'배재서관',isbn:''},
+  {id:1008,call:'813.6',title:'명왕비열전(2)',author:'김영주',publisher:'배재서관',isbn:''},
+  {id:1009,call:'813.6',title:'명왕비열전(3)',author:'김영주',publisher:'배재서관',isbn:''},
+  {id:1010,call:'813.6',title:'명왕비열전(4)',author:'김영주',publisher:'배재서관',isbn:''},
+  {id:1011,call:'440',title:'지구 이야기',author:'송은영',publisher:'자음과 모음',isbn:'89-544-0367-0'},
+  {id:1012,call:'410',title:'4차원 기하학 이야기',author:'정완상',publisher:'자음과모음',isbn:'89-544-0367-0'},
+  {id:1013,call:'739.3',title:'몽골생활 정보',author:'황선국',publisher:'한국장로 출판사',isbn:'89-398-0645-X'},
+  {id:1014,call:'600',title:'아버지의 사랑',author:'유용수',publisher:'보이스사',isbn:'89-504-0292-0'},
+  {id:1015,call:'600',title:'세월의 흔적',author:'백지영',publisher:'샛별',isbn:'8-887-1117-88'},
+  {id:1016,call:'666',title:'아름다운 디카세상',author:'윤광준',publisher:'웅진닷컴',isbn:'89-01-04575-3'},
+  {id:1017,call:'681.8',title:'오태석공연대본전집 1',author:'서연호',publisher:'연극과인간',isbn:'89-5786-015-0'},
+  {id:1018,call:'681.8',title:'오태석공연대본전집 2',author:'서연호',publisher:'연극과인간',isbn:'89-5786-015-0'},
+  {id:1019,call:'681.8',title:'오태석공연대본전집 3',author:'서연호',publisher:'연극과인간',isbn:'89-5786-015-0'},
+  {id:1020,call:'600ㅅ',title:'새롭게 떠나는 작은새',author:'김영교',publisher:'서울문학출판사',isbn:'978-89-93575-9'},
+  {id:1021,call:'600 ㄷ',title:'듣고 싶었던 말',author:'안경라',publisher:'서정시학',isbn:'978-89-94824-26-0'},
+  {id:1022,call:'600ㅅ',title:'서울 문학인',author:'박희진',publisher:'서울문학출판부',isbn:''},
+  {id:1023,call:'600',title:'아직도 가슴은 시린데',author:'최미숙',publisher:'상아',isbn:''},
+  {id:1024,call:'600 ㅁ',title:'미주문학 수필동인지',author:'미주문인회',publisher:'미주문학문인협회',isbn:'978-89-5925-832-1'},
+  {id:1025,call:'600 ㅁ',title:'미주시문학',author:'미주시문학원',publisher:'창조문학사',isbn:''},
+  {id:1026,call:'600ㅅ',title:'한순홍 시선집',author:'한순홍',publisher:'청문각',isbn:'89-7088-970-1'},
+  {id:1027,call:'600 ㅁ',title:'미주시문학 5 집',author:'미주시문학회',publisher:'미주시문학회',isbn:''},
+  {id:1028,call:'600ㅂ',title:'바른 가정생활의 비결',author:'겐 세츠',publisher:'새순출판사',isbn:''},
+  {id:1029,call:'600 ㅇ',title:'외지 13집',author:'재미시인 작품집',publisher:'재미 시인 협회',isbn:''},
+  {id:1030,call:'600ㅎ',title:'헬렌에게 보내는 편지',author:'이세방',publisher:'해뜸',isbn:'978-89-92797-06-1'},
+  {id:1031,call:'600 ㅈ',title:'재미수필 13집',author:'K.E.A.A.',publisher:'해드림출판사',isbn:''},
+  {id:1032,call:'810',title:'달라이라마와 도올의 만남 1',author:'도올 김용옥',publisher:'통나무',isbn:'89-8264-080-0'},
+  {id:1033,call:'810',title:'달라이라마와 도올의 만남 2',author:'도올 김용옥',publisher:'통나무',isbn:'89-8264-080-0'},
+  {id:1034,call:'810',title:'달라이라마와 도올의 만남 3',author:'도올 김용옥',publisher:'통나무',isbn:'89-8264-080-0'},
+  {id:1035,call:'600ㅊ',title:'처음답다',author:'강규석',publisher:'서울문학출판사',isbn:'978-89-93575-60-6'},
+  {id:1036,call:'810',title:'화',author:'틱낫한',publisher:'명진출판',isbn:'89-7677-130-3'},
+  {id:1037,call:'230',title:'나의 바다에 섬 하나',author:'홍윤숙',publisher:'기독지혜사',isbn:''},
+  {id:1038,call:'810.81',title:'거짓말처럼영원히변하지않을이런사람을',author:'김유미',publisher:'장락',isbn:'89-85262-81-5'},
+  {id:1039,call:'440',title:'허블이 들려주는 우주 팽창이야기',author:'정완상',publisher:'자음과모음',isbn:'89-544-0367-0'},
+  {id:1040,call:'440',title:'호킹이 들려주는 빅뱅우주 이야기',author:'정완상',publisher:'자음과모음',isbn:'89-544-0328-X'},
+  {id:1041,call:'600ㅂ',title:'반사체',author:'이기윤',publisher:'세일',isbn:'978-89-951720-3'},
+  {id:1042,call:'330',title:'만화 문화사회학적 읽기',author:'최샛별',publisher:'이화여자대학교출판부',isbn:'978-89-7300-808-7'},
+  {id:1043,call:'695.404',title:'영원한 리베로',author:'홍명보',publisher:'은행나무',isbn:'89-87976-98-X'},
+  {id:1044,call:'600ㅁ',title:'미주펜 문학',author:'겨울호',publisher:'국제펜클럽',isbn:'1975-5791'},
+  {id:1045,call:'681.8',title:'오태석공연대본전집 4',author:'서연호',publisher:'연극과인간',isbn:'89-5786-015-0'},
+  {id:1046,call:'681.8',title:'오태석공연대본전집 5',author:'서연호',publisher:'연극과인간',isbn:'89-5786-015-0'},
+  {id:1047,call:'230',title:'한국 토착교회 형성사 연구',author:'이덕주',publisher:'한국기독교역사연구소',isbn:'89-85628-26-7'},
+  {id:1048,call:'235.7',title:'교회의 성인교육',author:'박봉수',publisher:'한국장로교출판사',isbn:'89-398-3615-4'},
+  {id:1049,call:'500 ㅇ',title:'아들의 꿈 아빠의 꿈',author:'박유찬',publisher:'한장사',isbn:'89-398-0602-6'},
+  {id:1050,call:'600 ㄱ',title:'길 위에서',author:'김영교',publisher:'새벽',isbn:'89-950600-0-X'},
+  {id:1051,call:'600ㅇ',title:'외눈박이 물고기의 사랑',author:'류시화',publisher:'열림원',isbn:'89-7063-101-1'},
+  {id:1052,call:'230',title:'그런 소리가 그립다',author:'전덕기',publisher:'신지성사',isbn:'89-88927-06-0'},
+  {id:1053,call:'41',title:'살아갈 날들을 위한 기도',author:'윤구병',publisher:'화니북스',isbn:'89-953444-0-7'},
+  {id:1045,call:'600ㅅ',title:'시간의 물결',author:'차신재',publisher:'서울문학출판부',isbn:'978-89-93575-35-4'},
+  {id:1046,call:'236.911',title:'한국교회의 역사',author:'김인수',publisher:'한국장로교출판사',isbn:'89-398-0069-9'},
+  {id:1047,call:'600ㅅ',title:'기도의 노래',author:'강정애',publisher:'창조문학사',isbn:'978-89-7734-381-8'},
+  {id:1048,call:'680.9',title:'낱말없는 경전',author:'한재수',publisher:'고글',isbn:'978-89-86355-58-2'},
+  {id:1049,call:'600ㅋ',title:'크리스찬 문학 23집',author:'미주 크리스찬 문인',publisher:'미부 크리스찬문인협회',isbn:''},
+  {id:1050,call:'500ㅍ',title:'폭동이냐 항쟁이냐',author:'강성도',publisher:'한인연합 감리교 협의회',isbn:''},
+  {id:1051,call:'140 ㄷ',title:'디아스포라의 증인들',author:'오렌지카운티교협',publisher:'오렌지카운티 교협',isbn:''},
+  {id:1052,call:'500ㅅ',title:'생명을 보듬으며',author:'신현순',publisher:'',isbn:''},
+  {id:1053,call:'811.6',title:'외지 19집',author:'재미시인',publisher:'재미시인협회',isbn:'978-89-93575-15-6'},
+  {id:1054,call:'600ㄱ',title:'가만히 있어도',author:'구본철',publisher:'예찬출판기획',isbn:'978-1-56592-479-6'},
+  {id:1055,call:'230',title:'우리는 교회로 간다',author:'총회교육자원부',publisher:'한국장로교출판사',isbn:'89-398-3383-X'},
+  {id:1056,call:'230',title:'미주한인장로회 20년사',author:'미주장로총',publisher:'미주한인장로회총회',isbn:'89-398-3408-9'},
+  {id:1057,call:'810',title:'문학의창',author:'재외동포',publisher:'재외동포재단',isbn:'979-11-85409-19-1'},
+  {id:1058,call:'810',title:'나도 할수 있다!',author:'알렉산더 허',publisher:'떠오르는 도끼',isbn:'978-89-961138-4-3'},
+  {id:1059,call:'235.88',title:'교회의 정체성과 교회봉사',author:'칼 프리츠 다이버',publisher:'한국장로교출판사',isbn:'89-398-0320-5'},
+  {id:1060,call:'238.5',title:'개혁교회와 긴학',author:'존 H. 리스',publisher:'한국장로교출판사',isbn:'89-398-0111-3'},
+  {id:1061,call:'600ㅂ',title:'빗바랜사진첩',author:'최익철',publisher:'순수',isbn:'89-91695-33-7'},
+  {id:1062,call:'234.8',title:'사다리와 다리',author:'권택조',publisher:'한장사',isbn:'89-398-0607-7'},
+  {id:1063,call:'600ㅁ',title:'물소리 바람소리',author:'재미시인',publisher:'서울문학출판사',isbn:'978-89-93575-25-5'},
+  {id:1064,call:'814.6',title:'수필',author:'피촌들',publisher:'범우',isbn:'978-89-6365-009-8'},
+  {id:1065,call:'230',title:'부활연습',author:'안민성',publisher:'그루',isbn:'978-89-91845-07-7'},
+  {id:1066,call:'230',title:'가라, 간다',author:'박희성',publisher:'광야',isbn:'89-950759-7-X'},
+  {id:1067,call:'199.1',title:'쿠션',author:'조신영',publisher:'비전리더십',isbn:'978-89-90984-45-6'},
+  {id:1068,call:'233.211',title:'창세기 1',author:'이종곤',publisher:'소리들',isbn:'978-89-89394-15-0'},
+  {id:1069,call:'810',title:'오렌지 문학',author:'오렌지 글사랑 모임',publisher:'오렌지 글사랑 모임',isbn:'978-89-6039-329-5'},
+  {id:1070,call:'600ㅅ',title:'섬마을 선생과 피아노',author:'문남귀',publisher:'디엠피',isbn:''},
+  {id:1071,call:'234.82',title:'신영옥의 찬송',author:'신영옥',publisher:'생면의말씀사',isbn:'978-89-04-15742-6'},
+  {id:1072,call:'600ㄴ',title:'낙타의 속눈썹',author:'위진록',publisher:'성황석두루가 서원',isbn:''},
+  {id:1073,call:'230.99',title:'어거스틴 생애와 사상',author:'피터 브라운',publisher:'한국장로교출판사',isbn:'89-398-0057-5'},
+  {id:1074,call:'231.09',title:'기독교 사상사 2',author:'후스토 L. 곤잘레스',publisher:'한국장로교출판사',isbn:'89-398-0052-4'},
+  {id:1075,call:'600ㅁ',title:'문학나무',author:'한승원',publisher:'문학나무',isbn:'1599-2950'},
+  {id:1076,call:'500 ㅅ',title:'생명을 보듬으며',author:'신현순',publisher:'',isbn:''},
+  {id:1077,call:'600ㅅ',title:'시인되기 어렵네',author:'전영세',publisher:'전영세의집',isbn:''},
+  {id:1078,call:'236.911',title:'한국기독교사',author:'이영헌',publisher:'컨콜디아사',isbn:''},
+  {id:1079,call:'238.599',title:'청교도 사상',author:'제임스 패커',publisher:'기독교문서선교회',isbn:''},
+  {id:1080,call:'863',title:'람세스 1',author:'크리스티앙 자크',publisher:'문학동네',isbn:'89-8281-030-7'},
+  {id:1081,call:'863',title:'람세스 2',author:'크리스티앙 자크',publisher:'문학동네',isbn:'89-8281-030-7'},
+  {id:1082,call:'863',title:'람세스 3',author:'크리스티앙 자크',publisher:'문학동네',isbn:'89-8281-030-7'},
+  {id:1083,call:'863',title:'람세스 4',author:'크리스티앙 자크',publisher:'문학동네',isbn:'89-8281-030-7'},
+  {id:1084,call:'863',title:'람세스 5',author:'크리스티앙 자크',publisher:'문학동네',isbn:'89-8281-030-7'},
+  {id:1085,call:'235맥',title:'교회성장이해',author:'한국장로교',publisher:'한국장로교 출판사',isbn:'89-398-0305-1'},
+  {id:1086,call:'233.66',title:'찰스 스윈돌 사도행정',author:'찰스 스윈돌',publisher:'두란노',isbn:'89-7008-470-3'},
+  {id:1087,call:'1871',title:'교회와국가',author:'황성수',publisher:'계몽사',isbn:''},
+  {id:1088,call:'233.64',title:'누가의 예수 이야기',author:'O.C. 에드워즈 2세',publisher:'한국장로교 출판사',isbn:'89-398-0165-2'},
+  {id:1089,call:'231 코',title:'기독교와 고전문학',author:'찰스',publisher:'한국장로교출판사',isbn:'89-398-0063-x'},
+  {id:1090,call:'233.64',title:'기도 1',author:'후안 까를로스 오르띠즈',publisher:'만나',isbn:''},
+  {id:1091,call:'600 ㅁ',title:'무화과 나무 아래서 두번째',author:'정현',publisher:'',isbn:''},
+  {id:1092,call:'600 ㅍ',title:'포도 나무가지 세번째',author:'정현',publisher:'',isbn:''},
+  {id:1093,call:'600 ㅅ',title:'서쪽으로 날아가는 새',author:'박영호',publisher:'창조문학사',isbn:'978-89-7734-290-3'},
+  {id:1094,call:'234.2',title:'하나님의 나라',author:'최바울',publisher:'펴내기',isbn:'89-86179-20-0'},
+  {id:1095,call:'233',title:'성경 파노라마',author:'테리 홀',publisher:'규장',isbn:'978-89-6097-046-5'},
+  {id:1096,call:'233',title:'통큰통독',author:'주해홍',publisher:'두란노',isbn:'978-89-531-1703-7'},
+  {id:1097,call:'120 ㅇ',title:'어? 성경이 읽어지메!',author:'이애실',publisher:'성경방',isbn:'978-89-961151-0-6'},
+  {id:1098,call:'233',title:'구약읽기 네비게이션 48',author:'이애실',publisher:'성경방',isbn:'978-89-961151-5-1'},
+  {id:1099,call:'230',title:'힘을 기르소서',author:'흥사단 주위원부',publisher:'흥사단 미주위원부',isbn:'978-1-4675-7463-1'},
+  {id:1100,call:'600',title:'성령의능력받아 땅끝까지',author:'은혜한인교회',publisher:'대한예수교 장로회',isbn:''},
+  {id:1101,call:'600',title:'미주 한인이민 100년사',author:'남가주',publisher:'한국일보',isbn:''},
+  {id:1102,call:'600 ㅇ',title:'아버지의 사랑',author:'유용수',publisher:'보이스사',isbn:'89-504-0292-0'},
+  {id:1103,call:'410',title:'리만이 들려주는 4차원 기하학이야기',author:'정완상',publisher:'자음과 모음',isbn:'89-544-0367-0'},
+  {id:1104,call:'440',title:'에라토스테네스가 들려주는지구이야기',author:'정완상',publisher:'자음과모음',isbn:'89-544-0367-0'},
+  {id:1105,call:'810.82',title:'하오의 사중주',author:'김영교 외',publisher:'동화서적',isbn:'89-85582-10-0'},
+  {id:1106,call:'600 ㅅ',title:'세월의 흔적',author:'백지영',publisher:'샛별',isbn:'8-887-1117-88'},
+  {id:1107,call:'739.3',title:'몽골 생활정보 회화집',author:'황선국',publisher:'한국장로교출판사',isbn:'89-398-0645-X'},
+  {id:1108,call:'810',title:'킹다윗',author:'조나단 커시',publisher:'다른세상',isbn:'978-89-7766-174-5'},
+  {id:1109,call:'840',title:'핑거 스미스',author:'세라 워터스',publisher:'열린책들',isbn:'978-89-329-1754-2'},
+  {id:1110,call:'833.6',title:'냉정과 열정사이 블루',author:'츠지 히토나리',publisher:'소담출판사',isbn:'89-7381-369-2'},
+  {id:1111,call:'813.8',title:'TV동화 행복한 세상',author:'박인식',publisher:'샘터',isbn:'89-464-1353-0'},
+  {id:1112,call:'811.62',title:'미주시정신',author:'미주시인협회',publisher:'미주시인협회',isbn:'89-93575-58-3'},
+  {id:1113,call:'813.608',title:'내마음의 옥탑방',author:'박상우',publisher:'문학사상사',isbn:'89-7012-314-8'},
+  {id:1114,call:'814.6',title:'텅빈충만',author:'법정',publisher:'샘터',isbn:'978-89-464-1339-9'},
+  {id:1115,call:'848',title:'천년 동안 백만 마일',author:'도널드 밀러',publisher:'IVP',isbn:'978-89-328-1168-0'},
+  {id:1116,call:'813.6',title:'그많던 싱아는 누가다 먹었을까',author:'박완서',publisher:'웅진닷컴',isbn:'89-01-01760-1'},
+  {id:1117,call:'813.6',title:'사랑',author:'이광수',publisher:'우신사',isbn:'89-7131-002-2'},
+  {id:1118,call:'863',title:'뇌 (상)',author:'베르나르 베르베르',publisher:'열린책들',isbn:'89-329-0439-1'},
+  {id:1119,call:'863',title:'뇌 (상)',author:'베르나르 베르베르',publisher:'열린책들',isbn:'89-329-0439-1'},
+  {id:1120,call:'813',title:'이솝우화집',author:'김창활',publisher:'을유문화사',isbn:'89-324-0298-1'},
+  {id:1121,call:'813.7',title:'약방집 예배당',author:'박경숙',publisher:'홍성사',isbn:'978-89-365-0242-3'},
+  {id:1122,call:'814.6',title:'때를 알아라',author:'안병욱',publisher:'자유문학사',isbn:'89-424-0236-4'},
+  {id:1123,call:'814.05',title:'오만과 편견',author:'제인 오스틴',publisher:'리베르',isbn:'89-91759-06-8'},
+  {id:1124,call:'811.6',title:'숨겨진 사진첩',author:'백선영',publisher:'시사랑 음악사랑',isbn:'89-91664-07-5'},
+  {id:1125,call:'844',title:'행복한 사람',author:'타샤튜더',publisher:'윌북',isbn:'89-91141-25-0'},
+  {id:1126,call:'811.6',title:'너 사랑아',author:'박호평',publisher:'석국',isbn:''},
+  {id:1127,call:'813.6',title:'나의 사랑 클레멘타인',author:'최인호',publisher:'샘터',isbn:'89-464-0570-8'},
+  {id:1128,call:'711.28',title:'꼬레아 코리아',author:'오인동',publisher:'책과함께',isbn:'978-89-91221-36-9'},
+  {id:1129,call:'234.8',title:'왕의재정',author:'김미진',publisher:'규장',isbn:'978-89-6097-356-5'},
+  {id:1130,call:'600ㅇ',title:'어느 지리인생 이야기',author:'김인',publisher:'푸른길',isbn:'89-87691-66-7'},
+  {id:1131,call:'747.2',title:'오디세이',author:'호머',publisher:'다락원',isbn:'978-89-5995-149-9'},
+  {id:1132,call:'818',title:'멈추면, 비로소 보이는 것들',author:'혜민',publisher:'쌤엔파커스',isbn:'978-89-6570-060-9'},
+  {id:1133,call:'805',title:'한국이 싫어서',author:'장강명',publisher:'민음사',isbn:'978-89-374-7300-5'},
+  {id:1134,call:'813.6',title:'내 고향은 소록도',author:'연규호',publisher:'문예운동사',isbn:'978-89-5879-141-6'},
+  {id:1135,call:'818',title:'하악하악',author:'이외수',publisher:'해냄',isbn:'978-89-7337-950-7'},
+  {id:1136,call:'813.6',title:'손자병법 1',author:'정비석',publisher:'고려원',isbn:'89-12-06026-0'},
+  {id:1137,call:'813.6',title:'손자병법 2',author:'정비석',publisher:'고려원',isbn:'89-12-06027-9'},
+  {id:1138,call:'813.6',title:'손자병법 3',author:'정비석',publisher:'고려원',isbn:'89-12-06028-7'},
+  {id:1139,call:'813.6',title:'손자병법 4',author:'정비석',publisher:'고려원',isbn:''},
+  {id:1140,call:'818.6',title:'사서오경 (상)',author:'김영수',publisher:'새빛문화사',isbn:'89-85045-00-8'},
+  {id:1141,call:'818.6',title:'사서오경 (하)',author:'김영수',publisher:'새빛문화사',isbn:'89-85045-00-8'},
+  {id:1142,call:'843',title:'디지털 포트리스 1',author:'댄 브라운',publisher:'대교베탤스만',isbn:'89-5759-122-2'},
+  {id:1143,call:'843',title:'디지털 포트리스 2',author:'댄 브라운',publisher:'대교베탤스만',isbn:'89-5759-122-2'},
+  {id:1144,call:'N60',title:'연개소문 1',author:'유현종',publisher:'행림출판',isbn:'89-7292-006-1'},
+  {id:1145,call:'N60',title:'연개소문 2',author:'유현종',publisher:'행림출판',isbn:'89-7292-006-1'},
+  {id:1146,call:'N60',title:'연개소문 3',author:'유현종',publisher:'행림출판',isbn:'89-7292-006-1'},
+  {id:1147,call:'N60',title:'연개소문 4',author:'유현종',publisher:'행림출판',isbn:'89-7292-006-1'},
+  {id:1148,call:'N60',title:'연개소문 5',author:'유현종',publisher:'행림출판',isbn:'89-7292-006-1'},
+  {id:1149,call:'N60',title:'연개소문 6',author:'유현종',publisher:'행림출판',isbn:'89-7292-006-1'},
+  {id:1150,call:'N60',title:'연개소문 7',author:'유현종',publisher:'행림출판',isbn:'89-7292-006-1'},
+  {id:1151,call:'843.6',title:'인페르노 1',author:'안종설',publisher:'문학수첩',isbn:'978-89-8392-486-5'},
+  {id:1152,call:'843.6',title:'인페르노 2',author:'안종설',publisher:'문학수첩',isbn:'978-89-8392-486-5'},
+  {id:1153,call:'843.6',title:'인페르노 3',author:'안종설',publisher:'문학수첩',isbn:'978-89-8392-486-5'},
+  {id:1154,call:'843.6',title:'한강 1',author:'조정래',publisher:'해냄',isbn:'89-7337-396-X'},
+  {id:1155,call:'843.6',title:'한강 2',author:'조정래',publisher:'해냄',isbn:'89-7337-396-X'},
+  {id:1156,call:'843.6',title:'한강 3',author:'조정래',publisher:'해냄',isbn:'89-7337-396-X'},
+  {id:1157,call:'843.6',title:'한강 4',author:'조정래',publisher:'해냄',isbn:'89-7337-396-X'},
+  {id:1158,call:'843.6',title:'한강 5',author:'조정래',publisher:'해냄',isbn:'89-7337-396-X'},
+  {id:1159,call:'843.6',title:'한강 6',author:'조정래',publisher:'해냄',isbn:'89-7337-396-X'},
+  {id:1160,call:'843.7',title:'한강 7',author:'조정래',publisher:'해냄',isbn:'89-7337-396-X'},
+  {id:1161,call:'843.6',title:'한강 8',author:'조정래',publisher:'해냄',isbn:'89-7337-396-X'},
+  {id:1162,call:'813',title:'삼국지 1',author:'박종화',publisher:'언문사',isbn:'89-441-0103-5'},
+  {id:1163,call:'813',title:'삼국지 2',author:'박종화',publisher:'언문사',isbn:'89-441-0103-5'},
+  {id:1164,call:'813',title:'삼국지 3',author:'박종화',publisher:'언문사',isbn:'89-441-0104-3'},
+  {id:1165,call:'813',title:'삼국지 4',author:'박종화',publisher:'언문사',isbn:'89-441-0105-1'},
+  {id:1166,call:'813',title:'삼국지 5',author:'박종화',publisher:'언문사',isbn:'89-441-0106-X'},
+  {id:1167,call:'813',title:'삼국지 6',author:'박종화',publisher:'언문사',isbn:'89-441-0107-8'},
+  {id:1168,call:'813',title:'삼국지 7',author:'박종화',publisher:'언문사',isbn:'89-441-0108-6'},
+  {id:1169,call:'813',title:'삼국지 8',author:'박종화',publisher:'언문사',isbn:'89-441-0109-4'},
+  {id:1170,call:'911.05',title:'왕을 참 하라!',author:'백지원',publisher:'진명출판사',isbn:'978-89-8010-434-5'},
+  {id:1171,call:'911.05',title:'왕을 참 하라!',author:'백지원',publisher:'진명출판사',isbn:'978-89-8010-434-5'},
+  {id:1172,call:'813.6',title:'친구 1',author:'곽경택',publisher:'다리미디어',isbn:'89-88556-26-7'},
+  {id:1173,call:'813.6',title:'친구 2',author:'곽경택',publisher:'다리미디어',isbn:'89-88556-26-7'},
+  {id:1174,call:'813.6',title:'유림 1',author:'최인호',publisher:'열림원',isbn:'89-7063-468-1'},
+  {id:1175,call:'813.6',title:'유림 2',author:'최인호',publisher:'열림원',isbn:'89-7063-468-1'},
+  {id:1176,call:'813.6',title:'유림 3',author:'최인호',publisher:'열림원',isbn:'89-7063-468-1'},
+  {id:1177,call:'813.6',title:'유림 4',author:'최인호',publisher:'열림원',isbn:'89-7063-468-1'},
+  {id:1178,call:'813.6',title:'유림 5',author:'최인호',publisher:'열림원',isbn:'89-7063-468-1'},
+  {id:1179,call:'813.6',title:'유림 6',author:'최인호',publisher:'열림원',isbn:'89-7063-468-5'},
+  {id:1180,call:'812.6',title:'김영수 희곡.시나리오 선집 1',author:'서연호',publisher:'연극과인간',isbn:'89-5786-107-6'},
+  {id:1181,call:'812.6',title:'김영수 희곡.시나리오 선집 2',author:'서연호',publisher:'연극과인간',isbn:'89-5786-107-6'},
+  {id:1182,call:'812.6',title:'김영수 희곡.시나리오 선집 3',author:'서연호',publisher:'연극과인간',isbn:'89-5786-107-6'},
+  {id:1183,call:'812.6',title:'김영수 희곡.시나리오 선집 4',author:'서연호',publisher:'연극과인간',isbn:'89-5786-107-6'},
+  {id:1184,call:'812.6',title:'김영수 희곡.시나리오 선집 5',author:'서연호',publisher:'연극과인간',isbn:'89-5786-107-6'},
+  {id:1185,call:'812.6',title:'김영수 희곡.시나리오 선집 6',author:'서연호',publisher:'연극과인간',isbn:'89-5786-107-6'},
+  {id:1186,call:'812.6',title:'김영수 희곡.시나리오 선집 7',author:'서연호',publisher:'연극과인간',isbn:'89-5786-107-6'},
+  {id:1189,call:'813.62',title:'군함도 1',author:'한수산',publisher:'창비',isbn:'978-89-364-3587-5'},
+  {id:1190,call:'813.62',title:'군함도 2',author:'한수산',publisher:'창비',isbn:'978-89-364-3587-5'},
+  {id:1191,call:'818.5',title:'나의 아버지',author:'김세원',publisher:'나남출판',isbn:'89-300-0826-7'},
+  {id:1192,call:'813.6',title:'장군의 수염',author:'이어령',publisher:'문학사상사',isbn:'89-7012-450-0'},
+  {id:1193,call:'808.3',title:'헨리 문학상 수상작품집',author:'에드워드 P. 존스 외',publisher:'주한미국대사관공보과',isbn:'978-89-6078-010-1'},
+  {id:1194,call:'229',title:'티벳 사자의 서',author:'파드마삼바바',publisher:'정신세계사',isbn:'978-89-357-0066-0'},
+  {id:1195,call:'813.6',title:'천년의 금서',author:'김진명',publisher:'새움',isbn:'978-89-88537-01-5'},
+  {id:1196,call:'600 ㅎ',title:'하늘에 있는 맑은 샘물',author:'신혜원',publisher:'책과공간',isbn:'89-950441-0-1'},
+  {id:1197,call:'500 ㄱ',title:'그리운독도',author:'오정방',publisher:'진기획',isbn:''},
+  {id:1198,call:'600 ㅂ',title:'바람 지나가다',author:'김수자',publisher:'우성',isbn:''},
+  {id:1199,call:'500#',title:'30초의 기적',author:'안드레아 니렌버그',publisher:'나라',isbn:'89-89806-14-3'},
+  {id:1200,call:'840',title:'헬렌켈러',author:'도로시 허먼',publisher:'미다스북스',isbn:'89-89548-02-0'},
+  {id:1201,call:'808.1',title:'삶의노래',author:'피천득',publisher:'동학사',isbn:'89-7190-524-7'},
+  {id:1202,call:'813.6',title:'마야의 꿈',author:'연규호',publisher:'문예운동',isbn:'89-5879-103-9'},
+  {id:1203,call:'813.6',title:'칼의노래 1',author:'김훈',publisher:'생각의나무',isbn:'89-8498-063-3'},
+  {id:1204,call:'813.6',title:'칼의노래 2',author:'김훈',publisher:'생각의나무',isbn:'89-8498-063-3'},
+  {id:1205,call:'600 ㅇ',title:'이아침 축복처럼 꽃비가',author:'장영희',publisher:'갬터',isbn:'978-89-464-1776-2'},
+  {id:1206,call:'813.6',title:'남한산성',author:'김훈',publisher:'학고재',isbn:'978-89-5625-059-5'},
+  {id:1207,call:'841',title:'소네트 시가',author:'셰익스피어',publisher:'샘터',isbn:'89-464-0527-9'},
+  {id:1208,call:'843.5',title:'사랑의 기초 한남자',author:'알랭 드 보통',publisher:'문학동네',isbn:'978-89-546-2225-7'},
+  {id:1209,call:'814.7',title:'사랑은 상처를 허락하는것이다',author:'공지영',publisher:'폴라북스',isbn:'978-89-93094-64-0'},
+  {id:1210,call:'500 ㅇ',title:'올해의 좋은시 2001',author:'현대문학',publisher:'현대문학',isbn:'89-7275-210-X'},
+  {id:1211,call:'813.6',title:'상록수',author:'심훈',publisher:'일신서적공사',isbn:''},
+  {id:1212,call:'818',title:'세상속으로',author:'이준희',publisher:'문이당',isbn:'89-7456-261-8'},
+  {id:1213,call:'813.7',title:'풍금이 있던 자리',author:'신경숙',publisher:'문학과지성사',isbn:'89-320-1428-0'},
+  {id:1214,call:'814.6',title:'부부',author:'조만연.조옥동',publisher:'선우미디어',isbn:'89-5658-190-8'},
+  {id:1215,call:'670.15',title:'클래식 내마음의 발전소',author:'위진록',publisher:'음악세계',isbn:'978-89-8105-988-0'},
+  {id:1216,call:'813.6',title:'태백산맥 1',author:'조정래',publisher:'한길사',isbn:''},
+  {id:1217,call:'813.6',title:'태백산맥 2',author:'조정래',publisher:'한길사',isbn:''},
+  {id:1218,call:'813.6',title:'태백산맥 3',author:'조정래',publisher:'한길사',isbn:''},
+  {id:1219,call:'813.6',title:'태백산맥 4',author:'조정래',publisher:'한길사',isbn:''},
+  {id:1220,call:'813.6',title:'태백산맥 5',author:'조정래',publisher:'한길사',isbn:''},
+  {id:1221,call:'813.6',title:'태백산맥 6',author:'조정래',publisher:'한길사',isbn:''},
+  {id:1222,call:'813.6',title:'태백산맥 7',author:'조정래',publisher:'한길사',isbn:''},
+  {id:1223,call:'813.6',title:'태백산맥 8',author:'조정래',publisher:'한길사',isbn:''},
+  {id:1224,call:'813.6',title:'태백산맥 9',author:'조정래',publisher:'한길사',isbn:''},
+  {id:1225,call:'813.6',title:'태백산맥 10',author:'조정래',publisher:'한길사',isbn:''},
+  {id:1226,call:'813.6',title:'동의보감 (상)',author:'이은성',publisher:'창작과비평사',isbn:''},
+  {id:1227,call:'813.6',title:'동의보감 (중)',author:'이은성',publisher:'창작과비평사',isbn:''},
+  {id:1228,call:'813.6',title:'동의보감 (하)',author:'이은성',publisher:'창작과비평사',isbn:''},
+  {id:1229,call:'833.6',title:'제갈공명 (상)',author:'진순신',publisher:'까치',isbn:''},
+  {id:1230,call:'833.6',title:'제갈공명 (하)',author:'진순신',publisher:'까치',isbn:''},
+  {id:1231,call:'813.6',title:'이태백 (상)',author:'이여천',publisher:'혜서원',isbn:''},
+  {id:1232,call:'813.6',title:'이태백 (하)',author:'이여천',publisher:'혜서원',isbn:''},
+  {id:1233,call:'510',title:'건강한 생활',author:'데이비드 워너',publisher:'한국장로교출판사',isbn:''},
+  {id:1234,call:'513.994',title:'비타민C가 암을 죽인다',author:'야나기사와 아츠오',publisher:'부광',isbn:'89-90926-33-3'},
+  {id:1235,call:'813.6',title:'국화꽃 향기 그 두번째 이야기 1',author:'김하인',publisher:'생각의나무',isbn:'89-8498-130-3'},
+  {id:1236,call:'813.6',title:'국화꽃 향기 그 두번째 이야기 2',author:'김하인',publisher:'생각의나무',isbn:'89-8498-130-3'},
+  {id:1237,call:'519.74',title:'무병장수 체질건강법',author:'송병찬',publisher:'한솜미디어',isbn:'978-89-5959-110-7'},
+  {id:1238,call:'833.6',title:'총구 (상)',author:'이재신',publisher:'한국장로교출판사',isbn:'89-398-0825-8'},
+  {id:1239,call:'833.6',title:'총구 (하)',author:'이재신',publisher:'한국장로교출판사',isbn:'89-398-0825-8'},
+  {id:1240,call:'517.54',title:'건강보조식품 알고 먹읍시다',author:'임근형',publisher:'그린피스E&T',isbn:'89-953564-0-5'},
+  {id:1241,call:'594.5',title:'자연을 담은 소박한 밥상',author:'녹색연합',publisher:'북센스',isbn:'978-89-956772-0-9'},
+  {id:1242,call:'500 ㄱ',title:'기적의 다이어트 밥상',author:'이경영',publisher:'조선앤북',isbn:'978-89-93968-27-9'},
+  {id:1243,call:'500 ㅁ',title:'물과 소금 어떻게 섭취하면 좋을까',author:'안국준',publisher:'태웅출판사',isbn:'89-7209-177-4'},
+  {id:1244,call:'500 ㅅ',title:'산채요리',author:'김연식',publisher:'주부생활',isbn:''},
+  {id:1245,call:'500 ㅇ',title:'우리요리 이야기 1',author:'장재옥',publisher:'아이컴',isbn:'89-951401-1-9'},
+  {id:1246,call:'500 ㅇ',title:'우리요리 이야기 2',author:'장재옥',publisher:'아이컴',isbn:'89-953144-0-0'},
+  {id:1247,call:'500 ㅇ',title:'우리요리 이야기 3',author:'장재옥',publisher:'아이컴',isbn:'89-953144-0-0'}
 ];
 
 // ── CONFIG ──
 let SUPABASE_URL = localStorage.getItem('mkpc_sb_url') || '';
 let SUPABASE_KEY = localStorage.getItem('mkpc_sb_key') || '';
 let LIB_PASS     = localStorage.getItem('mkpc_lib_pass') || '';
-let supabase     = null;
+let sbClient = null;
 let isLibrarian  = false;
 let currentBook  = null;
 let checkoutsMap = {}; // book_id -> checkout record
@@ -1528,8 +1711,9 @@ let currentView   = 'grid';
 function initSupabase() {
   if (SUPABASE_URL && SUPABASE_KEY) {
     try {
-      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
       document.getElementById('setup-banner').classList.add('hidden');
+      document.getElementById('config-section').style.display = 'none';
       document.getElementById('cfg-url').value = SUPABASE_URL;
       document.getElementById('cfg-key').value = SUPABASE_KEY;
       if (LIB_PASS) document.getElementById('cfg-pass').value = LIB_PASS;
@@ -1553,11 +1737,13 @@ async function saveConfig() {
     localStorage.setItem('mkpc_sb_key', key);
     localStorage.setItem('mkpc_lib_pass', pass);
     SUPABASE_URL = url; SUPABASE_KEY = key; LIB_PASS = pass;
-    supabase = client;
+    sbClient = client;
     status.textContent = '✅ Connected!';
     document.getElementById('setup-banner').classList.add('hidden');
+    document.getElementById('config-section').style.display = 'none';
     loadCheckouts();
-    showToast('Supabase connected successfully!');
+    showToast('Supabase connected! ✅ You can now log in as librarian.');
+    window.scrollTo({top: 0, behavior: 'smooth'});
   } catch(e) {
     status.textContent = '❌ Failed: ' + (e.message || e);
   }
@@ -1565,9 +1751,9 @@ async function saveConfig() {
 
 // ── CHECKOUTS ──
 async function loadCheckouts() {
-  if (!supabase) return;
+  if (!sbClient) return;
   try {
-    const { data, error } = await supabase
+    const { data, error } = await sbClient
       .from('checkouts')
       .select('*')
       .is('returned_at', null)
@@ -1582,8 +1768,8 @@ async function loadCheckouts() {
 }
 
 async function checkoutBook(bookId, name, phone, dueDate, notes) {
-  if (!supabase) return;
-  const { data, error } = await supabase.from('checkouts').insert([{
+  if (!sbClient) return;
+  const { data, error } = await sbClient.from('checkouts').insert([{
     book_id: bookId,
     borrower_name: name,
     phone: phone || null,
@@ -1597,8 +1783,8 @@ async function checkoutBook(bookId, name, phone, dueDate, notes) {
 }
 
 async function returnBook(checkoutId, bookId) {
-  if (!supabase) return;
-  const { error } = await supabase.from('checkouts')
+  if (!sbClient) return;
+  const { error } = await sbClient.from('checkouts')
     .update({ returned_at: new Date().toISOString() })
     .eq('id', checkoutId);
   if (error) throw error;
@@ -1774,7 +1960,7 @@ function renderCheckoutSection(b) {
   const co = checkoutsMap[b.id];
   const section = document.getElementById('checkout-section');
   const content = document.getElementById('checkout-content');
-  if (!supabase) {
+  if (!sbClient) {
     section.style.display = 'block';
     document.getElementById('checkout-section-title').textContent = '대출 관리';
     content.innerHTML = `<div class="checkout-locked">데이터베이스가 연결되지 않았습니다.<br><a onclick="closeModalDirect();document.getElementById('config-section').scrollIntoView({behavior:'smooth'})">Setup에서 Supabase를 연결하세요 ↓</a></div>`;
@@ -1912,9 +2098,9 @@ async function handleAddBook() {
   status.textContent = '';
 
   // Add to Supabase if connected
-  if (supabase) {
+  if (sbClient) {
     try {
-      const { error } = await supabase.from('books').insert([{
+      const { error } = await sbClient.from('books').insert([{
         id: bookId, call_number: call_, title, author, publisher, isbn
       }]);
       if (error && error.code !== '42P01') {
@@ -1964,6 +2150,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal
 // ── START ──
 initSupabase();
 render();
+
 </script>
 </body>
 </html>

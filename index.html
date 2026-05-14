@@ -254,6 +254,79 @@
     <p>다른 검색어를 시도해보세요.</p>
   </div>
 
+  <!-- Supabase Setup Panel -->
+  <div class="panel" id="config-section">
+    <h2>⚙️ Supabase Setup</h2>
+    <p class="sub">To enable shared checkout tracking, you need a free <a href="https://supabase.com" target="_blank" style="color:var(--gold-dark);font-weight:600;">Supabase</a> account. Follow the steps below.</p>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem;">
+      <div style="background:var(--cream); border-radius:10px; padding:1.2rem; border:1px solid var(--border);">
+        <p style="font-weight:700; font-size:13px; margin-bottom:0.8rem; color:var(--brown);">Step 1 — Create a Supabase project</p>
+        <ol style="font-size:12.5px; color:var(--brown-light); line-height:2; padding-left:1.2rem;">
+          <li>Go to <a href="https://supabase.com" target="_blank" style="color:var(--gold-dark);">supabase.com</a> → Sign up free</li>
+          <li>Click <strong>New project</strong></li>
+          <li>Name it <code style="background:#eee;padding:1px 5px;border-radius:4px;">mkpc-library</code></li>
+          <li>Set a database password (save it!)</li>
+          <li>Wait ~2 min for it to provision</li>
+        </ol>
+      </div>
+      <div style="background:var(--cream); border-radius:10px; padding:1.2rem; border:1px solid var(--border);">
+        <p style="font-weight:700; font-size:13px; margin-bottom:0.8rem; color:var(--brown);">Step 2 — Create the checkouts table</p>
+        <ol style="font-size:12.5px; color:var(--brown-light); line-height:2; padding-left:1.2rem;">
+          <li>In your project, go to <strong>SQL Editor</strong></li>
+          <li>Click <strong>New query</strong></li>
+          <li>Paste the SQL below and click <strong>Run</strong></li>
+        </ol>
+        <pre style="background:#1a1209;color:#e8d5a3;padding:10px;border-radius:8px;font-size:11px;margin-top:8px;overflow-x:auto;white-space:pre-wrap;">CREATE TABLE checkouts (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  book_id integer NOT NULL,
+  borrower_name text NOT NULL,
+  phone text,
+  due_date date,
+  notes text,
+  checked_out_at timestamptz DEFAULT now(),
+  returned_at timestamptz
+);
+ALTER TABLE checkouts ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow all" ON checkouts FOR ALL USING (true) WITH CHECK (true);
+
+-- Also run this to enable adding new books:
+CREATE TABLE books (
+  id integer PRIMARY KEY,
+  call_number text,
+  title text NOT NULL,
+  author text,
+  publisher text,
+  isbn text,
+  added_at timestamptz DEFAULT now()
+);
+ALTER TABLE books ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow all" ON books FOR ALL USING (true) WITH CHECK (true);</pre>
+      </div>
+    </div>
+    <div style="background:var(--cream); border-radius:10px; padding:1.2rem; border:1px solid var(--border); margin-bottom:1.5rem;">
+      <p style="font-weight:700; font-size:13px; margin-bottom:0.8rem; color:var(--brown);">Step 3 — Get your API credentials</p>
+      <p style="font-size:12.5px; color:var(--brown-light); line-height:1.8;">Go to <strong>Project Settings → API</strong>. Copy your <strong>Project URL</strong> and <strong>anon/public key</strong> and paste them below.</p>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+      <div class="form-group">
+        <label>Supabase Project URL</label>
+        <input type="text" id="cfg-url" placeholder="https://xxxxxxxxxxxx.supabase.co">
+      </div>
+      <div class="form-group">
+        <label>Supabase Anon Key</label>
+        <input type="text" id="cfg-key" placeholder="eyJhbGciOiJIUzI1NiIs...">
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:1.5rem;">
+      <div class="form-group">
+        <label>Librarian Password (you choose)</label>
+        <input type="password" id="cfg-pass" placeholder="Choose a password">
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="saveConfig()">Save &amp; Connect</button>
+    <span id="cfg-status" style="font-size:13px; color:var(--brown-light); margin-left:12px;"></span>
+  </div>
+</div>
   <!-- Add Book Panel -->
   <div class="panel" id="add-book-section">
     <h2>📚 도서 추가 / Add a Book</h2>
@@ -300,66 +373,6 @@
     </div>
   </div>
 
-  <!-- Supabase Setup Panel -->
-  <div class="panel" id="config-section">
-    <h2>⚙️ Supabase Setup</h2>
-    <p class="sub">To enable shared checkout tracking, you need a free <a href="https://supabase.com" target="_blank" style="color:var(--gold-dark);font-weight:600;">Supabase</a> account. Follow the steps below.</p>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem;">
-      <div style="background:var(--cream); border-radius:10px; padding:1.2rem; border:1px solid var(--border);">
-        <p style="font-weight:700; font-size:13px; margin-bottom:0.8rem; color:var(--brown);">Step 1 — Create a Supabase project</p>
-        <ol style="font-size:12.5px; color:var(--brown-light); line-height:2; padding-left:1.2rem;">
-          <li>Go to <a href="https://supabase.com" target="_blank" style="color:var(--gold-dark);">supabase.com</a> → Sign up free</li>
-          <li>Click <strong>New project</strong></li>
-          <li>Name it <code style="background:#eee;padding:1px 5px;border-radius:4px;">mkpc-library</code></li>
-          <li>Set a database password (save it!)</li>
-          <li>Wait ~2 min for it to provision</li>
-        </ol>
-      </div>
-      <div style="background:var(--cream); border-radius:10px; padding:1.2rem; border:1px solid var(--border);">
-        <p style="font-weight:700; font-size:13px; margin-bottom:0.8rem; color:var(--brown);">Step 2 — Create the checkouts table</p>
-        <ol style="font-size:12.5px; color:var(--brown-light); line-height:2; padding-left:1.2rem;">
-          <li>In your project, go to <strong>SQL Editor</strong></li>
-          <li>Click <strong>New query</strong></li>
-          <li>Paste the SQL below and click <strong>Run</strong></li>
-        </ol>
-        <pre style="background:#1a1209;color:#e8d5a3;padding:10px;border-radius:8px;font-size:11px;margin-top:8px;overflow-x:auto;white-space:pre-wrap;">CREATE TABLE checkouts (
-  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-  book_id integer NOT NULL,
-  borrower_name text NOT NULL,
-  phone text,
-  due_date date,
-  notes text,
-  checked_out_at timestamptz DEFAULT now(),
-  returned_at timestamptz
-);
-ALTER TABLE checkouts ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Allow all" ON checkouts FOR ALL USING (true) WITH CHECK (true);</pre>
-      </div>
-    </div>
-    <div style="background:var(--cream); border-radius:10px; padding:1.2rem; border:1px solid var(--border); margin-bottom:1.5rem;">
-      <p style="font-weight:700; font-size:13px; margin-bottom:0.8rem; color:var(--brown);">Step 3 — Get your API credentials</p>
-      <p style="font-size:12.5px; color:var(--brown-light); line-height:1.8;">Go to <strong>Project Settings → API</strong>. Copy your <strong>Project URL</strong> and <strong>anon/public key</strong> and paste them below.</p>
-    </div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
-      <div class="form-group">
-        <label>Supabase Project URL</label>
-        <input type="text" id="cfg-url" placeholder="https://xxxxxxxxxxxx.supabase.co">
-      </div>
-      <div class="form-group">
-        <label>Supabase Anon Key</label>
-        <input type="text" id="cfg-key" placeholder="eyJhbGciOiJIUzI1NiIs...">
-      </div>
-    </div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:1.5rem;">
-      <div class="form-group">
-        <label>Librarian Password (you choose)</label>
-        <input type="password" id="cfg-pass" placeholder="Choose a password">
-      </div>
-    </div>
-    <button class="btn btn-primary" onclick="saveConfig()">Save &amp; Connect</button>
-    <span id="cfg-status" style="font-size:13px; color:var(--brown-light); margin-left:12px;"></span>
-  </div>
-</div>
 
 <div class="scripture">
   "여호와를 경외하는 것이 지식의 근본이거늘 미련한 자는 지혜와 훈계를 멸시하느니라"
@@ -1718,7 +1731,7 @@ function initSupabase() {
       document.getElementById('cfg-url').value = SUPABASE_URL;
       document.getElementById('cfg-key').value = SUPABASE_KEY;
       if (LIB_PASS) document.getElementById('cfg-pass').value = LIB_PASS;
-      loadCheckouts();
+      loadCustomBooks().then(() => loadCheckouts());
     } catch(e) { console.error('Supabase init failed', e); }
   }
 }
@@ -1743,6 +1756,7 @@ async function saveConfig() {
     status.textContent = '✅ Connected!';
     document.getElementById('setup-banner').classList.add('hidden');
     document.getElementById('config-section').style.display = 'none';
+    await loadCustomBooks();
     loadCheckouts();
     showToast('Supabase connected! ✅ You can now log in as librarian.');
     window.scrollTo({top: 0, behavior: 'smooth'});
@@ -1752,6 +1766,28 @@ async function saveConfig() {
 }
 
 // ── CHECKOUTS ──
+async function loadCustomBooks() {
+  if (!sbClient) return;
+  try {
+    const { data, error } = await sbClient
+      .from('books')
+      .select('*')
+      .order('id', { ascending: true });
+    if (error) {
+      // Table doesn't exist yet — that's fine
+      if (error.code === '42P01' || error.message.includes('does not exist')) return;
+      throw error;
+    }
+    (data || []).forEach(b => {
+      if (!BOOKS.find(x => x.id === b.id)) {
+        BOOKS.push({ id: b.id, call: b.call_number || '', title: b.title || '', author: b.author || '', publisher: b.publisher || '', isbn: b.isbn || '' });
+      }
+    });
+    BOOKS.sort((a, b) => a.id - b.id);
+    document.getElementById('total-count').textContent = BOOKS.length;
+  } catch(e) { console.warn('loadCustomBooks error:', e.message); }
+}
+
 async function loadCheckouts() {
   if (!sbClient) return;
   try {
@@ -2070,8 +2106,15 @@ function showToast(msg) {
 function updateAddBookUI() {
   const locked = document.getElementById('add-book-locked');
   const form   = document.getElementById('add-book-form');
-  if (isLibrarian) { locked.style.display='none'; form.style.display='block'; }
-  else             { locked.style.display='block'; form.style.display='none'; }
+  if (isLibrarian) {
+    locked.style.display = 'none';
+    form.style.display = 'block';
+    const nextId = Math.max(...BOOKS.map(b => b.id)) + 1;
+    document.getElementById('ab-id').placeholder = String(nextId);
+  } else {
+    locked.style.display = 'block';
+    form.style.display = 'none';
+  }
 }
 
 function clearAddBookForm() {
@@ -2082,67 +2125,69 @@ function clearAddBookForm() {
 }
 
 async function handleAddBook() {
-  const idVal    = document.getElementById('ab-id').value.trim();
-  const title    = document.getElementById('ab-title').value.trim();
-  const call_    = document.getElementById('ab-call').value.trim();
-  const author   = document.getElementById('ab-author').value.trim();
-  const publisher= document.getElementById('ab-publisher').value.trim();
-  const isbn     = document.getElementById('ab-isbn').value.trim();
-  const status   = document.getElementById('add-book-status');
-  const btn      = document.getElementById('add-book-btn');
+  const idVal     = document.getElementById('ab-id').value.trim();
+  const title     = document.getElementById('ab-title').value.trim();
+  const call_     = document.getElementById('ab-call').value.trim();
+  const author    = document.getElementById('ab-author').value.trim();
+  const publisher = document.getElementById('ab-publisher').value.trim();
+  const isbn      = document.getElementById('ab-isbn').value.trim();
+  const status    = document.getElementById('add-book-status');
+  const btn       = document.getElementById('add-book-btn');
 
-  if (!idVal || !title) { status.textContent = '⚠️ ID와 제목은 필수입니다.'; return; }
-  const bookId = parseInt(idVal);
+  status.style.color = '';
+  if (!title) { status.textContent = '⚠️ 제목은 필수입니다.'; return; }
+
+  // Auto-assign next ID if blank
+  const bookId = idVal ? parseInt(idVal) : Math.max(...BOOKS.map(b => b.id)) + 1;
   if (BOOKS.find(b => b.id === bookId)) { status.textContent = '⚠️ 이미 존재하는 등록번호입니다.'; return; }
 
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> 추가 중…';
-  status.textContent = '';
-
-  // Add to Supabase if connected
-  if (sbClient) {
-    try {
-      const { error } = await sbClient.from('books').insert([{
-        id: bookId, call_number: call_, title, author, publisher, isbn
-      }]);
-      if (error && error.code !== '42P01') {
-        // table might not exist yet — still add locally
-        console.warn('Supabase insert warning:', error.message);
-      }
-    } catch(e) { console.warn('Supabase books table not set up yet:', e.message); }
+  if (!sbClient) {
+    status.textContent = '⚠️ Supabase에 연결되지 않았습니다. 설정을 완료하세요.';
+    return;
   }
 
-  // Always add to local BOOKS array so it appears immediately
-  const newBook = { id: bookId, call: call_, title, author, publisher, isbn };
-  BOOKS.push(newBook);
-  BOOKS.sort((a,b) => a.id - b.id);
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> 저장 중…';
+  status.textContent = '';
 
-  // Update stats
-  document.getElementById('total-count').textContent = BOOKS.length;
+  try {
+    const { error } = await sbClient.from('books').insert([{
+      id: bookId, call_number: call_, title, author, publisher, isbn
+    }]);
+    if (error) throw error;
 
-  // Show in recently added
-  const recentlyDiv = document.getElementById('recently-added');
-  const recentList  = document.getElementById('recently-added-list');
-  recentlyDiv.style.display = 'block';
-  const item = document.createElement('div');
-  item.style.cssText = 'background:var(--cream);border:1px solid var(--border);border-radius:10px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;';
-  item.innerHTML = `
-    <div>
-      <span style="font-family:'Noto Serif KR',serif;font-weight:600;font-size:14px;color:var(--deep);">${title}</span>
-      <span style="font-size:12px;color:var(--brown-light);margin-left:10px;">${author || ''}${publisher ? ' · ' + publisher : ''}</span>
-    </div>
-    <span style="font-size:11px;font-family:monospace;color:var(--brown-light);background:var(--warm-white);padding:2px 8px;border-radius:100px;border:1px solid var(--border);">No.${String(bookId).padStart(3,'0')}</span>
-  `;
-  recentList.prepend(item);
+    // Add to local array
+    const newBook = { id: bookId, call: call_, title, author, publisher, isbn };
+    BOOKS.push(newBook);
+    BOOKS.sort((a, b) => a.id - b.id);
+    document.getElementById('total-count').textContent = BOOKS.length;
 
-  render();
-  clearAddBookForm();
-  status.style.color = 'var(--green)';
-  status.textContent = '✅ 도서가 추가되었습니다!';
-  btn.disabled = false;
-  btn.textContent = '+ 도서 추가';
-  setTimeout(() => { status.textContent = ''; status.style.color = ''; }, 3000);
-  showToast(`"${title}" 이(가) 추가되었습니다.`);
+    // Show in recently added list
+    const recentlyDiv = document.getElementById('recently-added');
+    const recentList  = document.getElementById('recently-added-list');
+    recentlyDiv.style.display = 'block';
+    const item = document.createElement('div');
+    item.style.cssText = 'background:var(--cream);border:1px solid var(--border);border-radius:10px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;';
+    item.innerHTML = `<div><span style="font-weight:600;font-size:14px;">${title}</span><span style="font-size:12px;color:var(--brown-light);margin-left:10px;">${author}${publisher ? ' · ' + publisher : ''}</span></div><span style="font-size:11px;font-family:monospace;color:var(--brown-light);background:var(--warm-white);padding:2px 8px;border-radius:100px;border:1px solid var(--border);">No.${String(bookId).padStart(3,'0')}</span>`;
+    recentList.prepend(item);
+
+    render();
+    clearAddBookForm();
+    document.getElementById('ab-id').placeholder = String(Math.max(...BOOKS.map(b => b.id)) + 1);
+    status.style.color = 'var(--green)';
+    status.textContent = `✅ "${title}" 추가 완료!`;
+    setTimeout(() => { status.textContent = ''; status.style.color = ''; }, 3000);
+    showToast(`"${title}" 이(가) 추가되었습니다.`);
+  } catch(e) {
+    status.style.color = 'var(--red)';
+    if (e.message && e.message.includes('does not exist')) {
+      status.innerHTML = '⚠️ books 테이블이 없습니다. <a href="#config-section" style="color:var(--gold-dark);font-weight:600;">설정 페이지의 SQL을 실행하세요.</a>';
+    } else {
+      status.textContent = '❌ 오류: ' + (e.message || '저장 실패');
+    }
+    btn.disabled = false;
+    btn.textContent = '+ 도서 추가';
+  }
 }
 
 // ── EVENTS ──

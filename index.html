@@ -2174,6 +2174,8 @@ async function handleAddBook() {
     render();
     clearAddBookForm();
     document.getElementById('ab-id').placeholder = String(Math.max(...BOOKS.map(b => b.id)) + 1);
+    btn.disabled = false;
+    btn.textContent = '+ 도서 추가';
     status.style.color = 'var(--green)';
     status.textContent = `✅ "${title}" 추가 완료!`;
     setTimeout(() => { status.textContent = ''; status.style.color = ''; }, 3000);
